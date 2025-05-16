@@ -68,7 +68,7 @@ for i in range(1, 21):
     # print(clean_data['observation.images.exo'].shape)
     #
     for k, v in data.items():
-        print(f"{k}: type={type(v)}, shape = {v.shape} dtype={getattr(v, 'dtype', None)}")
+        print(f"{k}: type={type(v)}, shape = {v.shape}") dtype={getattr(v, 'dtype', None)}")
     exit()
     outdir = f"/sdb1/piper_subtask_data/train/pick/Pick the blue plastic cup in the center./downnp/{i}"
     os.makedirs(outdir, exist_ok=True)
