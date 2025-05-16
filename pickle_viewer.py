@@ -7,6 +7,10 @@ with open("/sdb1/piper_subtask_data/train/pick/Pick the blue plastic cup in the 
 for key in data:
     print(f"{key}: type={type(data[key])}, shape={getattr(data[key], 'shape', None)}")
 
+print(data['episode_index'][:10])
+print(data['index'][:10])
+print(data['task_index'][:10])
+
 # 예시로 일부 확인
 #print("예시 데이터:")
 #print("첫 번째 이미지 shape:", data['observation.images.table'][0].shape)
