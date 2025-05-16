@@ -1,4 +1,6 @@
 import pickle
+import numpy as np
+import os
 
 for i in range(1, 21):
     with open(f"/sdb1/piper_subtask_data/train/pick/Pick the blue plastic cup in the center./{i}/episode.pickle", "rb") as f:
@@ -8,7 +10,10 @@ for i in range(1, 21):
     # for key in data:
     #     print(f"{key}: type={type(data[key])}, shape={getattr(data[key], 'shape', None)}")
 
-    with open(f"/sdb1/piper_subtask_data/train/pick/Pick the blue plastic cup in the center./downnp/{i}/episode.pickle", "wb") as f:
+
+    outdir = f"/sdb1/piper_subtask_data/train/pick/Pick the blue plastic cup in the center./downnp/{i}"
+    os.makedirs(outdir, exist_ok=True)
+    with open(f"{outdir}/episode.pickle", "wb") as f:
         pickle.dump(data, f, protocol=4)
 # print(data['episode_index'][:10])
 # print(data['index'][:10])
