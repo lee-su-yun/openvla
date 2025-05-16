@@ -12,9 +12,9 @@ class Piper5HZ_subtask(tfds.core.GeneratorBasedBuilder):
 
     VERSION = tfds.core.Version('1.0.0')
     RELEASE_NOTES = {
-      '1.0.0': 'Initial release with 5Hz conversion.',
-      '1.5.0': '5hz.',
-      '2.0.0': 'train',
+      '1.0.0': 'Initial release (one scenario)',
+      '1.5.0': 'additional release',
+      '2.0.0': ' ',
       '2.5.0': 'episode_id',
       '3.0.0': 'add dataset',
       '3.5.0': '20 episodes'
