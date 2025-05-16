@@ -83,13 +83,13 @@ if __name__ == "__main__":
         76003.0
       ],
       "mask": [
-        true,
-        true,
-        true,
-        true,
-        true,
-        true,
-        false
+        True,
+        True,
+        True,
+        True,
+        True,
+        True,
+        False
       ]
     },
     "proprio": {
