@@ -62,8 +62,8 @@ for i in range(1, 21):
         'observation.images.exo': to_numpy_safe(data['observation.images.exo']),
         'observation.images.table': to_numpy_safe(data['observation.images.table']),
     }
-    print(data['action'])
-    print(clean_data['action'])
+    print(data['action'][100])
+    print(clean_data['action'][100])
     print(data['observation.images.exo'].shape)
     print(clean_data['observation.images.exo'].shape)
     exit()
