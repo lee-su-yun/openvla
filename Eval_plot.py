@@ -29,7 +29,7 @@ if __name__ == "__main__":
         image = Image.fromarray(data['observation.images.table'][i])
         prompt = "In: What action should the robot take to align cups?\nOut:"
         inputs = processor(prompt, image).to("cuda", dtype=torch.bfloat16)
-        action = vla.predict_action(**inputs, unnorm_key="bridge_orig", do_sample=False)
+        action = vla.predict_action(**inputs, unnorm_key="piper5_hz", do_sample=False)
         traj_111_latest.append(action)
     predictions_111_latest = []
     x = []
