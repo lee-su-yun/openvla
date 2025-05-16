@@ -62,14 +62,13 @@ for i in range(1, 21):
         'observation.images.exo': to_numpy_safe(data['observation.images.exo']),
         'observation.images.table': to_numpy_safe(data['observation.images.table']),
     }
-    print(data['action'][100])
-    print(clean_data['action'][100])
-    print(data['observation.images.exo'][0])
-    print(clean_data['observation.images.exo'].shape)
-    exit()
-
-    for k, v in clean_data.items():
-        print(f"{k}: type={type(v)}, dtype={getattr(v, 'dtype', None)}")
+    # print(data['action'][100])
+    # print(clean_data['action'][100])
+    # print(data['observation.images.exo'][0])
+    # print(clean_data['observation.images.exo'].shape)
+    #
+    # for k, v in clean_data.items():
+    #     print(f"{k}: type={type(v)}, dtype={getattr(v, 'dtype', None)}")
 
     outdir = f"/sdb1/piper_subtask_data/train/pick/Pick the blue plastic cup in the center./downnp/{i}"
     os.makedirs(outdir, exist_ok=True)
