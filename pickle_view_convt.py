@@ -18,6 +18,14 @@ import numpy as np
 import pandas as pd
 import os
 
+def stack_if_object(arr):
+    if isinstance(arr, np.ndarray) and arr.dtype == object:
+        try:
+            return np.stack(arr)
+        except Exception:
+            return np.array([np.array(x) for x in arr])
+    return arr
+
 def to_numpy(x):
     return x.to_numpy() if isinstance(x, pd.Series) else np.array(x)
 
@@ -26,16 +34,16 @@ for i in range(1, 21):
         data = pickle.load(f)
 
     clean_data = {
-        'timestamp': to_numpy(data['timestamp']),
-        'frame_index': to_numpy(data['frame_index']),
-        'episode_index': to_numpy(data['episode_index']),
-        'index': to_numpy(data['index']),
-        'task_index': to_numpy(data['task_index']),
-        'action': to_numpy(data['action']),
-        'observation.state': to_numpy(data['observation.state']),
-        'observation.images.wrist': to_numpy(data['observation.images.wrist']),
-        'observation.images.exo': to_numpy(data['observation.images.exo']),
-        'observation.images.table': to_numpy(data['observation.images.table']),
+        'timestamp': data['timestamp'],
+        'frame_index': data['frame_index'],
+        'episode_index': data['episode_index'],
+        'index': data['index'],
+        'task_index': data['task_index'],
+        'action': stack_if_object(data['action']),
+        'observation.state': stack_if_object(data['observation.state']),
+        'observation.images.wrist': stack_if_object(data['observation.images.wrist']),
+        'observation.images.exo': stack_if_object(data['observation.images.exo']),
+        'observation.images.table': stack_if_object(data['observation.images.table']),
     }
     for k, v in clean_data.items():
         print(f"{k}: type={type(v)}, dtype={getattr(v, 'dtype', None)}")
