@@ -7,7 +7,7 @@ import tensorflow_datasets as tfds
 import tensorflow_hub as hub
 
 
-class Piper5HZ(tfds.core.GeneratorBasedBuilder):
+class Piper5HZ_subtask(tfds.core.GeneratorBasedBuilder):
     """DatasetBuilder for example dataset."""
 
     VERSION = tfds.core.Version('3.5.0')
@@ -86,7 +86,7 @@ class Piper5HZ(tfds.core.GeneratorBasedBuilder):
                 }),
                 'episode_metadata': tfds.features.FeaturesDict({
                     'file_path': tfds.features.Text(
-                        doc='/sdb1/piper_5hz/train'
+                        doc='/sdb1/piper5hz_subtask/train'
                     ),
                     'episode_id': tfds.features.Text(
                         doc='episode_id'
@@ -97,7 +97,7 @@ class Piper5HZ(tfds.core.GeneratorBasedBuilder):
     def _split_generators(self, dl_manager: tfds.download.DownloadManager):
         """Define data splits."""
         return {
-            'train': self._generate_examples(path='/sdb1/piper_5hz/train/Align_the_cups/'),
+            'train': self._generate_examples(path='/sdb1/piper5hz_subtask/train/Pick/'),
             # 'val': self._generate_examples(path='/sdb1/piper_5hz/validation'),
 
         }
@@ -111,9 +111,10 @@ class Piper5HZ(tfds.core.GeneratorBasedBuilder):
 
             # assemble episode --> here we're assuming demos so we set reward to 1 at the end
             episode = []
-            for i in range(len(data['index'])):
+            #for i in range(len(data['index'])):
+            for i in range(0, len(data['index']), 6): # for downsampling : 30Hz -> 5Hz
                 # compute Kona language embedding
-                language_embedding = self._embed(['Align cups'])[0].numpy()
+                language_embedding = self._embed(['Pick'])[0].numpy()
                 ep =episode_path.split('/')[-2]
                 # img = Image.open(f'{path}/{ep}/exo/color_img_{6*i}.jpeg')
                 # img2 = Image.open(f'{path}/{ep}/wrist/color_img_{6*i}.jpeg')
@@ -130,7 +131,7 @@ class Piper5HZ(tfds.core.GeneratorBasedBuilder):
                     'is_first': i == 0,
                     'is_last': i == (len(data['index']) - 1),
                     'is_terminal': i == (len(data['index']) - 1),
-                    'language_instruction': 'Align cups.',
+                    'language_instruction': 'Pick.',
                     'language_embedding': language_embedding,
                 })
 
@@ -148,7 +149,7 @@ class Piper5HZ(tfds.core.GeneratorBasedBuilder):
 
         # create list of all examples
         episode_paths = glob.glob(f"{path}/*/episode.pickle")
-        episode_paths = episode_paths[:20]
+        #episode_paths = episode_paths[:20]
 
         # for smallish datasets, use single-thread parsing
         for sample in episode_paths:
