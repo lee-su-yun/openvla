@@ -67,9 +67,9 @@ for i in range(1, 21):
     # print(data['observation.images.exo'][0])
     # print(clean_data['observation.images.exo'].shape)
     #
-    # for k, v in clean_data.items():
-    #     print(f"{k}: type={type(v)}, dtype={getattr(v, 'dtype', None)}")
-
+    for k, v in data.items():
+        print(f"{k}: type={type(v)}, dtype={getattr(v, 'dtype', None)}")
+    exit()
     outdir = f"/sdb1/piper_subtask_data/train/pick/Pick the blue plastic cup in the center./downnp/{i}"
     os.makedirs(outdir, exist_ok=True)
     np.savez(f"{outdir}/episode.npz", **clean_data)
