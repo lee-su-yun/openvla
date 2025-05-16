@@ -13,8 +13,7 @@ for i in range(1, 21):
 
     outdir = f"/sdb1/piper_subtask_data/train/pick/Pick the blue plastic cup in the center./downnp/{i}"
     os.makedirs(outdir, exist_ok=True)
-    with open(f"{outdir}/episode.pickle", "wb") as f:
-        pickle.dump(data, f, protocol=4)
+    np.savez(f"{outdir}/episode.npz", **data)
 # print(data['episode_index'][:10])
 # print(data['index'][:10])
 # print(data['task_index'][:10])
