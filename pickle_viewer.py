@@ -1,12 +1,15 @@
 import pickle
 
-with open("/sdb1/piper_subtask_data/train/pick/Pick the blue plastic cup in the center./1/episode.pickle", "rb") as f:
-    data = pickle.load(f)
+for i in range(0, 21):
+    with open(f"/sdb1/piper_subtask_data/train/pick/Pick the blue plastic cup in the center./{i}/episode.pickle", "rb") as f:
+        data = pickle.load(f)
 
-# 전체 구조 보기 (요약)
-for key in data:
-    print(f"{key}: type={type(data[key])}, shape={getattr(data[key], 'shape', None)}")
+    # 전체 구조 보기 (요약)
+    # for key in data:
+    #     print(f"{key}: type={type(data[key])}, shape={getattr(data[key], 'shape', None)}")
 
+    with open(f"/sdb1/piper_subtask_data/train/pick/Pick the blue plastic cup in the center./downnp/{i}/episode.pickle", "wb") as f:
+        pickle.dump(data, f, protocol=4)
 # print(data['episode_index'][:10])
 # print(data['index'][:10])
 # print(data['task_index'][:10])
