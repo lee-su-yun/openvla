@@ -64,12 +64,12 @@ for i in range(1, 21):
     }
     print(data['action'])
     print(clean_data['action'])
-    print(data['observation.images.exo'])
-    print(clean_data['observation.images.exo'])
+    print(data['observation.images.exo'].shape)
+    print(clean_data['observation.images.exo'].shape)
+    exit()
 
     for k, v in clean_data.items():
         print(f"{k}: type={type(v)}, dtype={getattr(v, 'dtype', None)}")
-    exit()
 
     outdir = f"/sdb1/piper_subtask_data/train/pick/Pick the blue plastic cup in the center./downnp/{i}"
     os.makedirs(outdir, exist_ok=True)
