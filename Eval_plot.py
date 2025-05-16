@@ -1,3 +1,4 @@
+import pickle
 from transformers import AutoModelForVision2Seq, AutoProcessor
 from PIL import Image
 import torch
