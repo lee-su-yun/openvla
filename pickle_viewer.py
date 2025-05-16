@@ -1,6 +1,6 @@
 import pickle
 
-with open("/your/path/to/episode.pickle", "rb") as f:
+with open("/sdb1/piper_subtask_data/train/pick/Pick the blue plastic cup in the center./1/episode.pickle", "rb") as f:
     data = pickle.load(f)
 
 # 전체 구조 보기 (요약)
