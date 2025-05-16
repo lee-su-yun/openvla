@@ -1,6 +1,6 @@
 import pickle
 
-for i in range(0, 21):
+for i in range(1, 21):
     with open(f"/sdb1/piper_subtask_data/train/pick/Pick the blue plastic cup in the center./{i}/episode.pickle", "rb") as f:
         data = pickle.load(f)
 
