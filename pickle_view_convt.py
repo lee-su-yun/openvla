@@ -37,6 +37,9 @@ for i in range(1, 21):
         'observation.images.exo': to_numpy(data['observation.images.exo']),
         'observation.images.table': to_numpy(data['observation.images.table']),
     }
+    for k, v in clean_data.items():
+        print(f"{k}: type={type(v)}, dtype={getattr(v, 'dtype', None)}")
+    exit()
 
     outdir = f"/sdb1/piper_subtask_data/train/pick/Pick the blue plastic cup in the center./downnp/{i}"
     os.makedirs(outdir, exist_ok=True)
