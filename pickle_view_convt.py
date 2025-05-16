@@ -62,6 +62,10 @@ for i in range(1, 21):
         'observation.images.exo': to_numpy_safe(data['observation.images.exo']),
         'observation.images.table': to_numpy_safe(data['observation.images.table']),
     }
+    print(data['action'])
+    print(clean_data['action'])
+    print(data['observation.images.exo'])
+    print(clean_data['observation.images.exo'])
 
     for k, v in clean_data.items():
         print(f"{k}: type={type(v)}, dtype={getattr(v, 'dtype', None)}")
