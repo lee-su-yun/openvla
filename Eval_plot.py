@@ -13,7 +13,7 @@ if __name__ == "__main__":
     vla = AutoModelForVision2Seq.from_pretrained(
         #"/sdb1/ckpt/openvla_5hz_n/openvla-7b+piper5_hz+b16+lr-0.0005+lora-r32+dropout-0.0/latest",
         "/ckpt/openvla-7b",
-        #attn_implementation="flash_attention_2", # [Optional] Requires `flash_attn`
+        attn_implementation="flash_attn", # [Optional] Requires `flash_attn`
         torch_dtype=dtype,
         #low_cpu_mem_usage=True,
         quantization_config=BitsAndBytesConfig(load_in_4bit=True, bnb_4bit_quant_type="nf4", bnb_4bit_use_double_quant=True, bnb_4bit_compute_dtype=dtype),
