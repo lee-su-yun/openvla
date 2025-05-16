@@ -20,7 +20,7 @@ if __name__ == "__main__":
         #low_cpu_mem_usage=True,
         #quantization_config=BitsAndBytesConfig(load_in_4bit=True, bnb_4bit_quant_type="nf4", bnb_4bit_use_double_quant=True, bnb_4bit_compute_dtype=dtype),
         trust_remote_code=True
-    )
+    ).to("cuda")
 
     with open("/sdb1/piper_5hz/validation/Align the cups/111/episode.pickle", "rb") as f:
         data = pickle.load(f)
