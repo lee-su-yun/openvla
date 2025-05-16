@@ -64,7 +64,7 @@ for i in range(1, 21):
     }
     print(data['action'][100])
     print(clean_data['action'][100])
-    print(data['observation.images.exo'].shape)
+    print(data['observation.images.exo'][0])
     print(clean_data['observation.images.exo'].shape)
     exit()
 
