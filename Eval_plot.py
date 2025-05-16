@@ -12,8 +12,8 @@ if __name__ == "__main__":
     # Load Processor & VLA
     processor = AutoProcessor.from_pretrained("openvla/openvla-7b", trust_remote_code=True)
     vla = AutoModelForVision2Seq.from_pretrained(
-        "/sdb1/ckpt/openvla_5hz_n/openvla-7b+piper5_hz+b16+lr-0.0005+lora-r32+dropout-0.0/latest",
-        #"/ckpt/openvla-7b",
+        #"/sdb1/ckpt/openvla_5hz_n/openvla-7b+piper5_hz+b16+lr-0.0005+lora-r32+dropout-0.0/latest",
+        "/ckpt/openvla-7b",
         #attn_implementation="flash_attention_2", # [Optional] Requires `flash_attn`
         torch_dtype=dtype,
         #low_cpu_mem_usage=True,
@@ -29,7 +29,7 @@ if __name__ == "__main__":
         image = Image.fromarray(data['observation.images.table'][i])
         prompt = "In: What action should the robot take to align cups?\nOut:"
         inputs = processor(prompt, image).to("cuda", dtype=torch.bfloat16)
-        action = vla.predict_action(**inputs, unnorm_key="piper5_hz", do_sample=False)
+        action = vla.predict_action(**inputs, unnorm_key="bridge_orig", do_sample=False)
         traj_111_latest.append(action)
     predictions_111_latest = []
     x = []
