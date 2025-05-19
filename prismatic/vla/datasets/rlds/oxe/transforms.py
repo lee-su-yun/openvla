@@ -840,9 +840,13 @@ def libero_dataset_transform(trajectory: Dict[str, Any]) -> Dict[str, Any]:
     trajectory["observation"]["gripper_state"] = trajectory["observation"]["state"][:, -2:]  # 2D gripper state
     return trajectory
 
+def piper5hz_dataset_transform(trajectory: Dict[str, Any]) -> Dict[str, Any]:
+    # 그대로 반환 (identity transform)
+    return trajectory
 
 # === Registry ===
 OXE_STANDARDIZATION_TRANSFORMS = {
+    "piper5_hz_subtask": piper5hz_dataset_transform,
     "bridge_oxe": bridge_oxe_dataset_transform,
     "bridge_orig": bridge_orig_dataset_transform,
     "bridge_dataset": bridge_orig_dataset_transform,
