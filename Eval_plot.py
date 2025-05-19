@@ -46,7 +46,8 @@ if __name__ == "__main__":
             "q99": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
         },
         "num_transitions": 10000,
-        "num_trajectories": 200}
+        "num_trajectories": 200
+    }
     # vla.norm_stats["piper5_hz"] = {
     #     "action": {
     #         "mean": [239851.25, -21164.9609375, 261495.8125, 11370.884765625, 37447.53515625, 28121.734375,
