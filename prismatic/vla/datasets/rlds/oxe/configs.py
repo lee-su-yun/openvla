@@ -52,6 +52,22 @@ class ActionEncoding(IntEnum):
 
 # === Individual Dataset Configs ===
 OXE_DATASET_CONFIGS = {
+    "piper5_hz_subtask": {
+        "image_obs_keys": {
+            "primary": "image",
+            "secondary": None,
+            "wrist": "wrist_image"
+        },
+        "depth_obs_keys": {
+            "primary": None,
+            "secondary": None,
+            "wrist": None
+        },
+        "state_obs_keys": ["state"],
+        "state_encoding": StateEncoding.POS_EULER,     # ← state도 같은 7D면 이거
+        "action_encoding": ActionEncoding.EEF_POS,     # ← x, y, z, rx, ry, rz, g
+    },
+
     "fractal20220817_data": {
         "image_obs_keys": {"primary": "image", "secondary": None, "wrist": None},
         "depth_obs_keys": {"primary": None, "secondary": None, "wrist": None},
