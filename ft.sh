@@ -13,6 +13,6 @@ CUDA_VISIBLE_DEVICES=1 \
   --learning_rate 5e-4 \
   --image_aug True \
   --wandb_project "openvla" \
-  --wandb_entity "suyunlee" \
+  --wandb_entity "suyunlee-seoul-national-university" \
   --save_steps 1 \
   --max_steps 1
