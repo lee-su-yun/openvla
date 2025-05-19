@@ -1,5 +1,4 @@
 
-CUDA_VISIBLE_DEVICES=1 \
   torchrun \
   --standalone --nnodes 1 --nproc-per-node 1 vla-scripts/finetune.py \
   --vla_path "/sda1/openvla-7b" \
