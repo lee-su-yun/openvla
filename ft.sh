@@ -15,3 +15,4 @@
   --wandb_entity "suyunlee-seoul-national-university" \
   --save_steps 2000 \
   --max_steps 20000
+
