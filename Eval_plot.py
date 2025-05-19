@@ -35,8 +35,10 @@ if __name__ == "__main__":
             "max": [440180.0, 231048.0, 527437.0, 180000.0, 90000.0, 179999.0, 76076.0],
             "min": [-56222.0, -154621.0, 164685.0, -179992.0, 4915.0, -179995.0, -1674.0],
             "q01": [-26293.22, -127458.24, 166510.0, -179821.02, 14869.9, -179428.0, -1528.0],
-            "q99": [420192.36000000004, 150692.44000000006, 495632.79000000004, 179749.08000000002, 85464.17,
-                        179322.16, 73382.73000000001]},
+            "q99": [420192.36000000004, 150692.44000000006, 495632.79000000004, 179749.08000000002, 85464.17, 179322.16, 73382.73000000001],
+            "mask": [True, True, True, True, True, True, False]
+
+        },
         "proprio": {
             "mean": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
             "std": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
@@ -78,11 +80,12 @@ if __name__ == "__main__":
     with open("/sdb1/piper_subtask_data/eval/pick/Validation/Pick the blue cup on the right./episode.pickle", "rb") as f:
         data = pickle.load(f)
     traj_111_latest = []
-    for i in range(150):
+    #for i in range(50):
+    for i in range(0, 300, 6):
         image = Image.fromarray(data['observation.images.table'][i])
         prompt = "In: What should the robot do to pick the blue cup on the right?\nOut:"
         inputs = processor(prompt, image).to(device, dtype=torch.bfloat16)
-        action = vla.predict_action(**inputs, unnorm_key="bridge_ori", do_sample=False)
+        action = vla.predict_action(**inputs, unnorm_key="piper5_hz", do_sample=False)
         traj_111_latest.append(action)
     predictions_111_latest = []
     x = []
@@ -92,7 +95,7 @@ if __name__ == "__main__":
     ry = []
     rz = []
     g = []
-    for i in range(150):
+    for i in range(0, 300, 6):
         x.append(traj_111_latest[i][0])
         y.append(traj_111_latest[i][1])
         z.append(traj_111_latest[i][2])
@@ -110,7 +113,7 @@ if __name__ == "__main__":
 
     import plotly.graph_objects as go
     import numpy as np
-    timesteps = np.arange(150)
+    timesteps = np.arange()
     import matplotlib.pyplot as plt
     gt_111 = []
     x = []
@@ -120,7 +123,7 @@ if __name__ == "__main__":
     ry = []
     rz = []
     g = []
-    for i in range(150):
+    for i in range(0, 300, 6):
         x.append(data['action'][i][0][0])
         y.append(data['action'][i][0][1])
         z.append(data['action'][i][0][2])
