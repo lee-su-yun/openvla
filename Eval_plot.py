@@ -65,7 +65,7 @@ if __name__ == "__main__":
     ###########
 
 
-    with open("/sdb1/piper_subtask_data/eval/pick/Validation/Pick the blue cup on the right.", "rb") as f:
+    with open("/sdb1/piper_subtask_data/eval/pick/Validation/Pick the blue cup on the right./episode.pickle", "rb") as f:
         data = pickle.load(f)
     traj_111_latest = []
     for i in range(150):
