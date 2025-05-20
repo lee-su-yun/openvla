@@ -25,7 +25,7 @@ if __name__ == "__main__":
     arr = np.array(data1['action'])
     print(arr.shape)
    #print(data1['action'].shape)
-    print(data['action'].shape)
+    print(data['action'][0][:][:])
     exit()
         #
     # import os
