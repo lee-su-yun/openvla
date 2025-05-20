@@ -2,7 +2,7 @@
   torchrun \
   --standalone --nnodes 1 --nproc-per-node 1 vla-scripts/finetune_with_val.py \
   --vla_path "/sda1/openvla-7b" \
-  --data_root_dir "/home/sylee/tensorflow_datasets/" \
+  --data_root_dir "/home/sylee/tensorflow_datasets" \
   --dataset_name "piper5_hz_subtask:2.5.0" \
   --run_root_dir "/sdc1/piper_subtask/openvla/addval" \
   --adapter_tmp_dir "/sdc1/piper_subtask/openvla/addval" \
