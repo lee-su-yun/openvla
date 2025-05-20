@@ -24,6 +24,7 @@ if __name__ == "__main__":
                 f"  └ {key}: type = {type(data[key])}, len = {len(data[key]) if hasattr(data[key], '__len__') else 'N/A'}")
     arr = np.array(data["observation.images.table"])
     print(arr.shape)
+    print(data['observation.images.table'][0].shape)
     exit()
         #
     # import os
