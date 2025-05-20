@@ -318,6 +318,7 @@ def finetune(cfg: FinetuneConfig) -> None:
         vla.train()
         optimizer.zero_grad()
         for batch_idx, batch in enumerate(dataloader):
+            print('hello')
             with torch.autocast("cuda", dtype=torch.bfloat16):
                 output: CausalLMOutputWithPast = vla(
                     input_ids=batch["input_ids"].to(device_id),
