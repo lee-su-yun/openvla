@@ -21,7 +21,7 @@ if __name__ == "__main__":
         for key in data:
             print(
                 f"  └ {key}: type = {type(data[key])}, len = {len(data[key]) if hasattr(data[key], '__len__') else 'N/A'}")
-    print(data[observation.images.wrist].shape)
+    print(data["observation.images.table"].shape)
     exit()
         #
     # import os
