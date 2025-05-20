@@ -52,7 +52,7 @@ from prismatic.extern.hf.processing_prismatic import PrismaticImageProcessor, Pr
 # Sane Defaults
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
-device = torch.device("cuda:2")
+#device = torch.device("cuda:2")
 # # === Utilities ===
 # # fmt: off
 # def create_vision_transform(vla: nn.Module, input_size: int) -> Callable[[Image.Image], torch.Tensor]:
@@ -158,7 +158,11 @@ def finetune(cfg: FinetuneConfig) -> None:
     print(f"Fine-tuning OpenVLA Model `{cfg.vla_path}` on `{cfg.dataset_name}`")
 
     # [Validate] Ensure GPU Available & Set Device / Distributed Context
+    #assert torch.cuda.is_available(), "Fine-tuning assumes at least one GPU is available!"
     assert torch.cuda.is_available(), "Fine-tuning assumes at least one GPU is available!"
+    distributed_state = PartialState()
+    torch.cuda.set_device(device_id := distributed_state.local_process_index)
+    torch.cuda.empty_cache()
 
     # Configure Unique Experiment ID & Log Directory
     exp_id = (
@@ -208,7 +212,8 @@ def finetune(cfg: FinetuneConfig) -> None:
     if cfg.use_quantization:
         vla = prepare_model_for_kbit_training(vla)
     else:
-        vla = vla.to(device)
+        #vla = vla.to(device)
+        vla = vla.to(device_id)
 
     # [LoRA] Wrap Model w/ PEFT `LoraConfig` =>> by default we set `target_modules=all-linear`
     if cfg.use_lora:
@@ -223,7 +228,8 @@ def finetune(cfg: FinetuneConfig) -> None:
         vla.print_trainable_parameters()
 
     # Wrap VLA in PyTorch DDP Wrapper for Multi-GPU Training
-    vla = DDP(vla, device_ids=[2], find_unused_parameters=True, gradient_as_bucket_view=True)
+    #vla = DDP(vla, device_ids=[2], find_unused_parameters=True, gradient_as_bucket_view=True)
+    vla = DDP(vla, device_ids=[device_id], find_unused_parameters=True, gradient_as_bucket_view=True)
 
     # Create Optimizer =>> note that we default to a simple constant learning rate!
     trainable_params = [param for param in vla.parameters() if param.requires_grad]
@@ -263,7 +269,8 @@ def finetune(cfg: FinetuneConfig) -> None:
     )
 
     # [Important] Save Dataset Statistics =>> used to de-normalize actions for inference!
-    if True:
+    #if True:
+    if distributed_state.is_main_process:
         save_dataset_statistics(vla_dataset.dataset_statistics, run_dir)
 
     # Create Collator and DataLoader
@@ -297,7 +304,7 @@ def finetune(cfg: FinetuneConfig) -> None:
 
     val_every_n_steps = 100
     # Initialize Logging =>> W&B
-    if True:
+    if distributed_state.is_main_process:
         wandb.init(entity=cfg.wandb_entity, project=cfg.wandb_project, name=f"ft+{exp_id}")
 
     # Deque to store recent train metrics (used for computing smoothened metrics for gradient accumulation)
@@ -361,7 +368,7 @@ def finetune(cfg: FinetuneConfig) -> None:
             smoothened_l1_loss = sum(recent_l1_losses) / len(recent_l1_losses)
 
             # Push Metrics to W&B (every 10 gradient steps)
-            if True and gradient_step_idx % 10 == 0:
+            if distributed_state.is_main_process and gradient_step_idx % 10 == 0:
                 wandb.log(
                     {
                         "train_loss": smoothened_loss,
@@ -379,7 +386,7 @@ def finetune(cfg: FinetuneConfig) -> None:
 
             # Save Model Checkpoint =>> by default, only keeps the latest checkpoint, continually overwriting it!
             if gradient_step_idx > 0 and gradient_step_idx % cfg.save_steps == 0:
-                if True:
+                if distributed_state.is_main_process:
                     print(f"Saving Model Checkpoint for Step {gradient_step_idx}")
 
                     # If LoRA, we first save adapter weights, then merge into full model; otherwise, default save!
@@ -399,7 +406,7 @@ def finetune(cfg: FinetuneConfig) -> None:
                     )
                     merged_vla = PeftModel.from_pretrained(base_vla, adapter_dir)
                     merged_vla = merged_vla.merge_and_unload()
-                    if True:
+                    if distributed_state.is_main_process:
                         # Always save to unique directory per step
                         checkpoint_dir = Path(run_dir) / f"step_{gradient_step_idx}"
                         os.makedirs(checkpoint_dir, exist_ok=True)
