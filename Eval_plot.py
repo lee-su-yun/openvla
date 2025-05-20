@@ -9,11 +9,11 @@ dtype = torch.bfloat16
 
 if __name__ == "__main__":
 
-    model_path = "/sdb1/ckpt/openvla_5hz_n/openvla-7b+piper5_hz+b16+lr-0.0005+lora-r32+dropout-0.0/latest"
-        #"/sdc1/piper_subtask/openvla/openvla-7b+piper5_hz_subtask+b16+lr-0.0005+lora-r32+dropout-0.0--image_aug"
+    model_path = "/sdc1/piper_subtask/openvla/openvla-7b+piper5_hz_subtask+b16+lr-0.0005+lora-r32+dropout-0.0--image_aug"
+        #
 
     # Load Processor & VLA
-    processor = AutoProcessor.from_pretrained("openvla/openvla-7b", trust_remote_code=True)
+    processor = AutoProcessor.from_pretrained(model_path, trust_remote_code=True)
     vla = AutoModelForVision2Seq.from_pretrained(
         #"/sdb1/ckpt/openvla_5hz_n/openvla-7b+piper5_hz+b16+lr-0.0005+lora-r32+dropout-0.0/latest",
         #"/ckpt/openvla-7b",
@@ -80,10 +80,10 @@ if __name__ == "__main__":
 
 
     #with open("/sdb1/piper_subtask_data/eval/pick/Validation/Pick the blue cup on the right./episode.pickle", "rb") as f:
-    #with open("/sdb1/piper_subtask_data/eval/pick/Validation/Pick the blue cup on the right./episode.pickle", "rb") as f:
-    with open("/sdb1/piper_5hz/validation/Align the cups/111/episode.pickle", "rb") as f:
+    with open("/sdb1/piper_subtask_data/eval/pick/Validation/Pick the blue cup on the right./episode.pickle", "rb") as f:
+    #with open("/sdb1/piper_5hz/validation/Align the cups/111/episode.pickle", "rb") as f:
         data = pickle.load(f)
-    exit()
+
     traj_111_latest = []
     #for i in range(50):
     for i in range(0, 300, 6):
