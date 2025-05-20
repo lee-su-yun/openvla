@@ -221,10 +221,10 @@ if __name__ == "__main__":
         ),
     )])
     fig_111_latest.show()
-    fig_111_latest.write_html("fig_111_latest_b16_l32_4bit.html")
+    fig_111_latest.write_html("Pick_the_yellow_cup.html")
     for i in range(7):
         n = f'71{i + 1}'
         plt.subplot(int(n))
         plt.plot(predictions_111_latest[i], 'b--', gt_111[i], 'r')
-    plt.savefig("fig_111_latest_b16_l32_4bit.png")
+    plt.savefig("Pick_the_yellow_cup.png")
     plt.show()
