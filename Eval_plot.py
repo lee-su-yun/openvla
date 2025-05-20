@@ -10,9 +10,8 @@ import numpy as np
 
 if __name__ == "__main__":
 
-    with open("/sdb1/piper_subtask_data/eval/pick/Val_np/Pick the blue cup on the right./episode.pickle/episode.pickle",
-              "rb") as f:
-        # with open("/sdb1/piper_5hz/validation/Align the cups/111/episode.pickle", "rb") as f:
+    #with open("/sdb1/piper_subtask_data/eval/pick/Val_np/Pick the blue cup on the right./episode.pickle/episode.pickle", "rb") as f:
+    with open("/sdb1/piper_5hz/validation/Align the cups/111/episode.pickle", "rb") as f:
         data = pickle.load(f)
     print(f"data type: {type(data)}\n")
 
@@ -24,7 +23,7 @@ if __name__ == "__main__":
                 f"  └ {key}: type = {type(data[key])}, len = {len(data[key]) if hasattr(data[key], '__len__') else 'N/A'}")
     arr = np.array(data["observation.images.table"])
     print(arr.shape)
-    print(data['observation.images.table'][0][0].shape)
+    print(data['observation.images.table'][0].shape)
     exit()
         #
     # import os
