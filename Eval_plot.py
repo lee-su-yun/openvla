@@ -28,19 +28,19 @@ if __name__ == "__main__":
    #  print(data['action'][0][:][:])
    #  exit()
         #
-   import os
-   import pickle
-   import pandas as pd
+    import os
+    import pickle
+    import pandas as pd
 
    # 경로 설정
-   source_base = "/sdb1/piper_subtask_data/eval/pick/Validation_add/Pick the blue cup on the right."
-   target_base = "/sdb1/piper_subtask_data/eval/pick/Val_add_np/Pick the blue cup on the right."
+    source_base = "/sdb1/piper_subtask_data/eval/pick/Validation_add/Pick the blue cup on the right."
+    target_base = "/sdb1/piper_subtask_data/eval/pick/Val_add_np/Pick the blue cup on the right."
 
    # 폴더 없으면 생성
-   os.makedirs(target_base, exist_ok=True)
+    os.makedirs(target_base, exist_ok=True)
 
    # 1~10 에피소드 반복
-   for i in range(1, 11):
+    for i in range(1, 11):
        source_path = os.path.join(source_base, str(i), "episode.pickle")
        target_path = os.path.join(target_base, f"episode{i}.pickle")
 
