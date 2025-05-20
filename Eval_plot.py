@@ -11,20 +11,20 @@ import numpy as np
 if __name__ == "__main__":
 
     #with open("/sdb1/piper_subtask_data/eval/pick/Val_np/Pick the blue cup on the right./episode.pickle/episode.pickle", "rb") as f:
-    with open("/sdb1/piper_5hz/validation/Align the cups/111/episode.pickle", "rb") as f:
-        data = pickle.load(f)
-    print(f"data type: {type(data)}\n")
-
-    # dict일 경우 → 키 확인
-    if isinstance(data, dict):
-        print(f"key: {list(data.keys())}\n")
-        for key in data:
-            print(
-                f"  └ {key}: type = {type(data[key])}, len = {len(data[key]) if hasattr(data[key], '__len__') else 'N/A'}")
-    arr = np.array(data["observation.images.table"])
-    print(arr.shape)
-    print(data['observation.images.table'][0].shape)
-    exit()
+    # with open("/sdb1/piper_5hz/validation/Align the cups/111/episode.pickle", "rb") as f:
+    #     data = pickle.load(f)
+    # print(f"data type: {type(data)}\n")
+    #
+    # # dict일 경우 → 키 확인
+    # if isinstance(data, dict):
+    #     print(f"key: {list(data.keys())}\n")
+    #     for key in data:
+    #         print(
+    #             f"  └ {key}: type = {type(data[key])}, len = {len(data[key]) if hasattr(data[key], '__len__') else 'N/A'}")
+    # arr = np.array(data["observation.images.table"])
+    # print(arr.shape)
+    # print(data['observation.images.table'][0].shape)
+    # exit()
         #
     # import os
     # import pickle
@@ -131,7 +131,7 @@ if __name__ == "__main__":
     traj_111_latest = []
     #for i in range(50):
     for i in range(0, 300, 6):
-        image = Image.fromarray(data['observation.images.table'][i])
+        image = Image.fromarray(data['observation.images.table'][i][0])
         prompt = "In: What should the robot do to pick the blue cup on the right?\nOut:"
         inputs = processor(prompt, image).to(device, dtype=torch.bfloat16)
         action = vla.predict_action(**inputs, unnorm_key="piper5_hz", do_sample=False)
