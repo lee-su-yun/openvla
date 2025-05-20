@@ -15,5 +15,4 @@
   --wandb_entity "suyunlee-seoul-national-university" \
   --save_steps 1000 \
   --max_steps 10000 \
-  --shuffle_buffer_size 10000 \
 
