@@ -295,7 +295,7 @@ def finetune(cfg: FinetuneConfig) -> None:
         num_workers=0
     )
 
-    val_every_n_steps = 1000
+    val_every_n_steps = 100
     # Initialize Logging =>> W&B
     if True:
         wandb.init(entity=cfg.wandb_entity, project=cfg.wandb_project, name=f"ft+{exp_id}")
