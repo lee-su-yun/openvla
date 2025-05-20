@@ -22,9 +22,9 @@ if __name__ == "__main__":
         for key in data:
             print(
                 f"  └ {key}: type = {type(data[key])}, len = {len(data[key]) if hasattr(data[key], '__len__') else 'N/A'}")
-    arr = np.array(data["observation.images.table"])
+    arr = np.array(data1['action'])
     print(arr.shape)
-    print(data1['action'].shape)
+   #print(data1['action'].shape)
     print(data['action'].shape)
     exit()
         #
