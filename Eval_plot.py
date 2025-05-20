@@ -33,8 +33,8 @@ if __name__ == "__main__":
     import pandas as pd
 
    # 경로 설정
-    source_base = "/sdb1/piper_subtask_data/eval/pick/Validation_add/Pick the white cup nearest from the robot."
-    target_base = "/sdb1/piper_subtask_data/eval/pick/Val_add_np/Pick the white cup nearest from the robot."
+    source_base = "/sdb1/piper_subtask_data/eval/pick/Validation_add/Pick the red cup behind the purple one."
+    target_base = "/sdb1/piper_subtask_data/eval/pick/Val_add_np/Pick the red cup behind the purple one."
 
    # 폴더 없으면 생성
     os.makedirs(target_base, exist_ok=True)
