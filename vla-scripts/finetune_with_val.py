@@ -113,10 +113,10 @@ class FinetuneConfig:
 def evaluate(vla, dataloader, device, action_tokenizer):
     vla.eval()
     val_losses, val_accuracies, val_l1s = [], [], []
-    print('bye')
+    print(len(dataloader))
+    exit()
     has_data = False
     for batch in dataloader:
-        print('dd')
         has_data = True
         with torch.autocast("cuda", dtype=torch.bfloat16):
             output: CausalLMOutputWithPast = vla(
