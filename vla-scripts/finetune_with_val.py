@@ -113,9 +113,7 @@ class FinetuneConfig:
 def evaluate(vla, dataloader, device, action_tokenizer):
     vla.eval()
     val_losses, val_accuracies, val_l1s = [], [], []
-    print(len(dataloader))
-    exit()
-    has_data = False
+    #has_data = False
     for batch in dataloader:
         has_data = True
         with torch.autocast("cuda", dtype=torch.bfloat16):
@@ -147,9 +145,9 @@ def evaluate(vla, dataloader, device, action_tokenizer):
         val_accuracies.append(action_accuracy.item())
         val_l1s.append(action_l1_loss.item())
 
-    if not has_data:
-        print("Validation dataloader is empty!")
-        return 0.0, 0.0, 0.0
+    # if not has_data:
+    #     print("Validation dataloader is empty!")
+    #     return 0.0, 0.0, 0.0
     vla.train()  # 다시 학습 모드로 전환
 
     return (
@@ -323,6 +321,8 @@ def finetune(cfg: FinetuneConfig) -> None:
         print("Starting training loop")
         vla.train()
         optimizer.zero_grad()
+        print(len(dataloader))
+        exit()
         for batch_idx, batch in enumerate(dataloader):
             with torch.autocast("cuda", dtype=torch.bfloat16):
                 output: CausalLMOutputWithPast = vla(
@@ -428,14 +428,9 @@ def finetune(cfg: FinetuneConfig) -> None:
 
                 # Block on Main Process Checkpointing
                 dist.barrier()
-            print('hello1')
                 # === Run Validation after Checkpoint ===
             if gradient_step_idx % val_every_n_steps == 0:
-                print('hello3')
                 val_loss, val_acc, val_l1 = evaluate(vla, val_dataloader, device_id, action_tokenizer)
-                print(val_loss, val_acc, val_l1)
-                print('hello2')
-                exit()
                 wandb.log(
                     {
                         "val_loss": val_loss,
