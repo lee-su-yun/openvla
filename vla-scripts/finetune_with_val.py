@@ -52,7 +52,7 @@ from prismatic.extern.hf.processing_prismatic import PrismaticImageProcessor, Pr
 # Sane Defaults
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
-device = torch.device("cuda:2")
+device = torch.device("cuda:0")
 # # === Utilities ===
 # # fmt: off
 # def create_vision_transform(vla: nn.Module, input_size: int) -> Callable[[Image.Image], torch.Tensor]:
