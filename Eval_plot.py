@@ -11,17 +11,25 @@ if __name__ == "__main__":
 
     model_path = "/sdc1/piper_subtask/openvla/openvla-7b+piper5_hz_subtask+b16+lr-0.0005+lora-r32+dropout-0.0--image_aug"
         #
-    def safe_load(path):
-        with open(path, 'rb') as f:
-            try:
-                obj = pickle.load(f)
-                print(f"{path} → OK, type: {type(obj)}")
-            except Exception as e:
-                print(f"{path} → FAILED: {e}")
+    import pickle
+    import pandas as pd
 
+    # 원본 pandas DataFrame을 불러오기
+    with open("/sdb1/piper_subtask_data/eval/pick/Validation/Pick the blue cup on the right./episode.pickle",
+              "rb") as f:
+        df = pickle.load(f)
 
-    safe_load("/sdb1/piper_5hz/validation/Align the cups/111/episode.pickle")
-    safe_load("/sdb1/piper_subtask_data/eval/pick/Validation/Pick the blue cup on the right./episode.pickle")
+    # DataFrame을 dict로 변환 (기본은 column-wise list 형태)
+    data_dict = df.to_dict(orient="list")
+
+    # 새로운 pickle 파일로 저장
+    with open(
+            "/sdb1/piper_subtask_data/eval/pick/Validation/Pick the blue cup on the right./episode_dict_format.pickle",
+            "wb") as f:
+        pickle.dump(data_dict, f, protocol=4)
+
+    print("good")
+    exit()
 
     # Load Processor & VLA
     processor = AutoProcessor.from_pretrained(model_path, trust_remote_code=True)
