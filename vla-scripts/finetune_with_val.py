@@ -307,6 +307,7 @@ def finetune(cfg: FinetuneConfig) -> None:
 
     # Train!
     with tqdm.tqdm(total=cfg.max_steps, leave=False) as progress:
+        print("Starting training loop")
         vla.train()
         optimizer.zero_grad()
         for batch_idx, batch in enumerate(dataloader):
@@ -410,7 +411,7 @@ def finetune(cfg: FinetuneConfig) -> None:
                         processor.save_pretrained(checkpoint_dir)
                         merged_vla.save_pretrained(checkpoint_dir)
 
-                        print(f"✅ Saved Model Checkpoint for Step {gradient_step_idx} at: {checkpoint_dir}")
+                        print(f"Saved Model Checkpoint for Step {gradient_step_idx} at: {checkpoint_dir}")
 
                 # Block on Main Process Checkpointing
                 dist.barrier()
