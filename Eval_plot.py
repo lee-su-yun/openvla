@@ -10,23 +10,23 @@ import numpy as np
 
 if __name__ == "__main__":
 
-    with open("/sdb1/piper_subtask_data/eval/pick/Val_np/Pick the blue cup on the right./episode.pickle/episode.pickle", "rb") as f:
-        data1 = pickle.load(f)
-    with open("/sdb1/piper_5hz/validation/Align the cups/111/episode.pickle", "rb") as f:
-        data = pickle.load(f)
-    print(f"data type: {type(data)}\n")
-
-    # dict일 경우 → 키 확인
-    if isinstance(data, dict):
-        print(f"key: {list(data.keys())}\n")
-        for key in data:
-            print(
-                f"  └ {key}: type = {type(data[key])}, len = {len(data[key]) if hasattr(data[key], '__len__') else 'N/A'}")
-    arr = np.array(data1['action'])
-    print(arr.shape)
-   #print(data1['action'].shape)
-    print(data['action'][0][:][:])
-    exit()
+   #  with open("/sdb1/piper_subtask_data/eval/pick/Val_np/Pick the blue cup on the right./episode.pickle/episode.pickle", "rb") as f:
+   #      data1 = pickle.load(f)
+   #  with open("/sdb1/piper_5hz/validation/Align the cups/111/episode.pickle", "rb") as f:
+   #      data = pickle.load(f)
+   #  print(f"data type: {type(data)}\n")
+   #
+   #  # dict일 경우 → 키 확인
+   #  if isinstance(data, dict):
+   #      print(f"key: {list(data.keys())}\n")
+   #      for key in data:
+   #          print(
+   #              f"  └ {key}: type = {type(data[key])}, len = {len(data[key]) if hasattr(data[key], '__len__') else 'N/A'}")
+   #  arr = np.array(data1['action'])
+   #  print(arr.shape)
+   # #print(data1['action'].shape)
+   #  print(data['action'][0][:][:])
+   #  exit()
         #
     # import os
     # import pickle
@@ -146,7 +146,7 @@ if __name__ == "__main__":
     ry = []
     rz = []
     g = []
-    for i in range(0, 300, 6):
+    for i in range(50):
         x.append(traj_111_latest[i][0])
         y.append(traj_111_latest[i][1])
         z.append(traj_111_latest[i][2])
