@@ -256,6 +256,7 @@ def finetune(cfg: FinetuneConfig) -> None:
     vla_dataset = RLDSDataset(
         cfg.data_root_dir,
         cfg.dataset_name,
+        version="2.5.0",
         batch_transform,
         resize_resolution=tuple(vla.module.config.image_sizes),
         shuffle_buffer_size=cfg.shuffle_buffer_size,
