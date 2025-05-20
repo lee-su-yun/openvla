@@ -113,9 +113,10 @@ class FinetuneConfig:
 def evaluate(vla, dataloader, device, action_tokenizer):
     vla.eval()
     val_losses, val_accuracies, val_l1s = [], [], []
-
+    print('bye')
     has_data = False
     for batch in dataloader:
+        print('dd')
         has_data = True
         with torch.autocast("cuda", dtype=torch.bfloat16):
             output: CausalLMOutputWithPast = vla(
@@ -430,6 +431,7 @@ def finetune(cfg: FinetuneConfig) -> None:
             print('hello1')
                 # === Run Validation after Checkpoint ===
             if gradient_step_idx % val_every_n_steps == 0:
+                print('hello3')
                 val_loss, val_acc, val_l1 = evaluate(vla, val_dataloader, device_id, action_tokenizer)
                 print(val_loss, val_acc, val_l1)
                 print('hello2')
@@ -443,7 +445,7 @@ def finetune(cfg: FinetuneConfig) -> None:
                     step=gradient_step_idx,
                 )
                 print(f"Validation step {gradient_step_idx} | loss: {val_loss:.4f}, acc: {val_acc:.4f}, l1: {val_l1:.4f}")
-
+            print('hi')
 
             # Stop training when max_steps is reached
             if gradient_step_idx == cfg.max_steps:
