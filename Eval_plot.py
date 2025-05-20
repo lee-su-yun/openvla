@@ -164,7 +164,7 @@ if __name__ == "__main__":
 
     import plotly.graph_objects as go
     import numpy as np
-    timesteps = np.arange()
+    timesteps = np.arange(50)
     import matplotlib.pyplot as plt
     gt_111 = []
     x = []
