@@ -11,33 +11,33 @@ if __name__ == "__main__":
 
 
         #
-    import os
-    import pickle
-    import pandas as pd
-
-    # 원본 파일 경로
-    source_path = "/sdb1/piper_subtask_data/eval/pick/Validation/Pick the blue cup on the right./episode.pickle"
-
-    # 저장할 디렉토리와 파일 경로
-    target_dir = "//sdb1/piper_subtask_data/eval/pick/Val_np/Pick the blue cup on the right./episode.pickle"
-    target_path = os.path.join(target_dir, "episode.pickle")
-
-    # 폴더 없으면 생성
-    os.makedirs(target_dir, exist_ok=True)
-
-    # 1. DataFrame 로드
-    with open(source_path, "rb") as f:
-        df = pickle.load(f)
-
-    # 2. DataFrame → dict (column-wise list)
-    data_dict = df.to_dict(orient="list")
-
-    # 3. dict 저장
-    with open(target_path, "wb") as f:
-        pickle.dump(data_dict, f, protocol=4)
-
-    print(f"save: {target_path}")
-    exit()
+    # import os
+    # import pickle
+    # import pandas as pd
+    #
+    # # 원본 파일 경로
+    # source_path = "/sdb1/piper_subtask_data/eval/pick/Validation/Pick the blue cup on the right./episode.pickle"
+    #
+    # # 저장할 디렉토리와 파일 경로
+    # target_dir = "//sdb1/piper_subtask_data/eval/pick/Val_np/Pick the blue cup on the right./episode.pickle"
+    # target_path = os.path.join(target_dir, "episode.pickle")
+    #
+    # # 폴더 없으면 생성
+    # os.makedirs(target_dir, exist_ok=True)
+    #
+    # # 1. DataFrame 로드
+    # with open(source_path, "rb") as f:
+    #     df = pickle.load(f)
+    #
+    # # 2. DataFrame → dict (column-wise list)
+    # data_dict = df.to_dict(orient="list")
+    #
+    # # 3. dict 저장
+    # with open(target_path, "wb") as f:
+    #     pickle.dump(data_dict, f, protocol=4)
+    #
+    # print(f"save: {target_path}")
+    # exit()
 
     # Load Processor & VLA
     model_path = "/sdc1/piper_subtask/openvla/openvla-7b+piper5_hz_subtask+b16+lr-0.0005+lora-r32+dropout-0.0--image_aug"
@@ -113,7 +113,7 @@ if __name__ == "__main__":
     #with open("/sdb1/piper_subtask_data/eval/pick/Validation/Pick the blue cup on the right./episode.pickle", "rb") as f:
     with open("/sdb1/piper_5hz/validation/Align the cups/111/episode.pickle", "rb") as f:
         data = pickle.load(f)
-
+    exit()
     traj_111_latest = []
     #for i in range(50):
     for i in range(0, 300, 6):
