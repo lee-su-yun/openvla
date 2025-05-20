@@ -19,7 +19,7 @@ if __name__ == "__main__":
     # source_path = "/sdb1/piper_subtask_data/eval/pick/Validation/Pick the blue cup on the right./episode.pickle"
     #
     # # 저장할 디렉토리와 파일 경로
-    # target_dir = "//sdb1/piper_subtask_data/eval/pick/Val_np/Pick the blue cup on the right./episode.pickle"
+    # target_dir = "//sdb1/piper_subtask_data/eval/pick/Val_np/Pick the blue cup on the right."
     # target_path = os.path.join(target_dir, "episode.pickle")
     #
     # # 폴더 없으면 생성
@@ -110,7 +110,7 @@ if __name__ == "__main__":
 
 
     #with open("/sdb1/piper_subtask_data/eval/pick/Validation/Pick the blue cup on the right./episode.pickle", "rb") as f:
-    with open("/sdb1/piper_subtask_data/eval/pick/Val_np/Pick the blue cup on the right./episode.pickle", "rb") as f:
+    with open("/sdb1/piper_subtask_data/eval/pick/Val_np/Pick the blue cup on the right./episode.pickle/episode.pickle", "rb") as f:
     #with open("/sdb1/piper_5hz/validation/Align the cups/111/episode.pickle", "rb") as f:
         data = pickle.load(f)
     exit()
