@@ -320,9 +320,9 @@ def finetune(cfg: FinetuneConfig) -> None:
         for batch_idx, batch in enumerate(dataloader):
             with torch.autocast("cuda", dtype=torch.bfloat16):
                 output: CausalLMOutputWithPast = vla(
-                    input_ids=batch["input_ids"].to(device),
-                    attention_mask=batch["attention_mask"].to(device),
-                    pixel_values=batch["pixel_values"].to(torch.bfloat16).to(device),
+                    input_ids=batch["input_ids"].to(device_id),
+                    attention_mask=batch["attention_mask"].to(device_id),
+                    pixel_values=batch["pixel_values"].to(torch.bfloat16).to(device_id),
                     labels=batch["labels"],
                 )
                 loss = output.loss
@@ -425,7 +425,7 @@ def finetune(cfg: FinetuneConfig) -> None:
 
                 # === Run Validation after Checkpoint ===
             if gradient_step_idx % val_every_n_steps == 0:
-                val_loss, val_acc, val_l1 = evaluate(vla, val_dataloader, device, action_tokenizer)
+                val_loss, val_acc, val_l1 = evaluate(vla, val_dataloader, device_id, action_tokenizer)
                 wandb.log(
                     {
                         "val_loss": val_loss,
