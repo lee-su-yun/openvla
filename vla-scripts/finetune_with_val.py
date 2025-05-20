@@ -114,6 +114,8 @@ def evaluate(vla, dataloader, device, action_tokenizer):
     vla.eval()
     val_losses, val_accuracies, val_l1s = [], [], []
     #has_data = False
+    print(len(dataloader))
+    exit()
     for batch in dataloader:
         has_data = True
         with torch.autocast("cuda", dtype=torch.bfloat16):
@@ -263,6 +265,13 @@ def finetune(cfg: FinetuneConfig) -> None:
         image_transform=processor.image_processor.apply_transform,
         prompt_builder_fn=PurePromptBuilder if "v01" not in cfg.vla_path else VicunaV15ChatPromptBuilder,
     )
+    val_batch_transform = RLDSBatchTransform(
+        action_tokenizer,
+        processor.tokenizer,
+        image_transform=processor.image_processor.apply_transform,
+        prompt_builder_fn=PurePromptBuilder if "v01" not in cfg.vla_path else VicunaV15ChatPromptBuilder,
+    )
+
     vla_dataset = RLDSDataset(
         cfg.data_root_dir,
         cfg.dataset_name,
@@ -293,7 +302,7 @@ def finetune(cfg: FinetuneConfig) -> None:
     val_dataset = RLDSDataset(
         cfg.data_root_dir,
         "piper5_hz_subtask:3.0.0",  # or dataset_name + "_val" if you store separately
-        batch_transform,
+        val_batch_transform,
         resize_resolution=tuple(vla.module.config.image_sizes),
         shuffle_buffer_size=1,  # no shuffle needed
         image_aug=False  # important: no augmentation for validation!
@@ -322,7 +331,6 @@ def finetune(cfg: FinetuneConfig) -> None:
         vla.train()
         optimizer.zero_grad()
         print(len(dataloader))
-        exit()
         for batch_idx, batch in enumerate(dataloader):
             with torch.autocast("cuda", dtype=torch.bfloat16):
                 output: CausalLMOutputWithPast = vla(
