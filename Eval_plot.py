@@ -33,10 +33,10 @@ if __name__ == "__main__":
     import pandas as pd
 
     # 원본 파일 경로
-    source_path = "/sdb1/piper_subtask_data/eval/pick/Validation/Pick the blue cup on the right./episode.pickle"
+    source_path = "/sdb1/piper_subtask_data/eval/pick/Validation/Pick the white cup nearest from the robot./episode.pickle"
 
     # 저장할 디렉토리와 파일 경로
-    target_dir = "//sdb1/piper_subtask_data/eval/pick/Val_np/Pick the blue cup on the right."
+    target_dir = "//sdb1/piper_subtask_data/eval/pick/Val_np/Pick the white cup nearest from the robot."
     target_path = os.path.join(target_dir, "episode.pickle")
 
     # 폴더 없으면 생성
