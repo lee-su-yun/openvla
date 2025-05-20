@@ -114,7 +114,9 @@ def evaluate(vla, dataloader, device, action_tokenizer):
     vla.eval()
     val_losses, val_accuracies, val_l1s = [], [], []
 
+    has_data = False
     for batch in dataloader:
+        has_data = True
         with torch.autocast("cuda", dtype=torch.bfloat16):
             output: CausalLMOutputWithPast = vla(
                 input_ids=batch["input_ids"].to(device),
@@ -144,6 +146,9 @@ def evaluate(vla, dataloader, device, action_tokenizer):
         val_accuracies.append(action_accuracy.item())
         val_l1s.append(action_l1_loss.item())
 
+    if not has_data:
+        print("Validation dataloader is empty!")
+        return 0.0, 0.0, 0.0
     vla.train()  # 다시 학습 모드로 전환
 
     return (
@@ -318,7 +323,6 @@ def finetune(cfg: FinetuneConfig) -> None:
         vla.train()
         optimizer.zero_grad()
         for batch_idx, batch in enumerate(dataloader):
-            print('hello')
             with torch.autocast("cuda", dtype=torch.bfloat16):
                 output: CausalLMOutputWithPast = vla(
                     input_ids=batch["input_ids"].to(device_id),
@@ -327,7 +331,7 @@ def finetune(cfg: FinetuneConfig) -> None:
                     labels=batch["labels"],
                 )
                 loss = output.loss
-            print('hello')
+
             # Normalize loss to account for gradient accumulation
             normalized_loss = loss / cfg.grad_accumulation_steps
 
@@ -367,7 +371,7 @@ def finetune(cfg: FinetuneConfig) -> None:
             smoothened_loss = sum(recent_losses) / len(recent_losses)
             smoothened_action_accuracy = sum(recent_action_accuracies) / len(recent_action_accuracies)
             smoothened_l1_loss = sum(recent_l1_losses) / len(recent_l1_losses)
-            print('hello1')
+
             # Push Metrics to W&B (every 10 gradient steps)
             if distributed_state.is_main_process and gradient_step_idx % 10 == 0:
                 wandb.log(
@@ -423,10 +427,13 @@ def finetune(cfg: FinetuneConfig) -> None:
 
                 # Block on Main Process Checkpointing
                 dist.barrier()
-            print('hello2')
+            print('hello1')
                 # === Run Validation after Checkpoint ===
             if gradient_step_idx % val_every_n_steps == 0:
                 val_loss, val_acc, val_l1 = evaluate(vla, val_dataloader, device_id, action_tokenizer)
+                print(val_loss, val_acc, val_l1)
+                print('hello2')
+                exit()
                 wandb.log(
                     {
                         "val_loss": val_loss,
