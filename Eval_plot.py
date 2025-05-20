@@ -22,7 +22,6 @@ if __name__ == "__main__":
 
     safe_load("/sdb1/piper_5hz/validation/Align the cups/111/episode.pickle")
     safe_load("/sdb1/piper_subtask_data/eval/pick/Validation/Pick the blue cup on the right./episode.pickle")
-    exit()
 
     # Load Processor & VLA
     processor = AutoProcessor.from_pretrained(model_path, trust_remote_code=True)
