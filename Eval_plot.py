@@ -78,6 +78,19 @@ if __name__ == "__main__":
 
     ###########
 
+    def safe_load(path):
+        with open(path, 'rb') as f:
+            try:
+                obj = pickle.load(f)
+                print(f"{path} → OK, type: {type(obj)}")
+            except Exception as e:
+                print(f"{path} → FAILED: {e}")
+
+
+    safe_load("/sdb1/piper_5hz/validation/Align the cups/111/episode.pickle")
+    safe_load("/sdb1/piper_subtask_data/eval/pick/Validation/Pick the blue cup on the right./episode.pickle")
+    exit()
+
 
     #with open("/sdb1/piper_subtask_data/eval/pick/Validation/Pick the blue cup on the right./episode.pickle", "rb") as f:
     #with open("/sdb1/piper_subtask_data/eval/pick/Validation/Pick the blue cup on the right./episode.pickle", "rb") as f:
