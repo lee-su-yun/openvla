@@ -13,7 +13,7 @@ if __name__ == "__main__":
         #"/sdc1/piper_subtask/openvla/openvla-7b+piper5_hz_subtask+b16+lr-0.0005+lora-r32+dropout-0.0--image_aug"
 
     # Load Processor & VLA
-    processor = AutoProcessor.from_pretrained(model_path, trust_remote_code=True)
+    processor = AutoProcessor.from_pretrained("openvla/openvla-7b", trust_remote_code=True)
     vla = AutoModelForVision2Seq.from_pretrained(
         #"/sdb1/ckpt/openvla_5hz_n/openvla-7b+piper5_hz+b16+lr-0.0005+lora-r32+dropout-0.0/latest",
         #"/ckpt/openvla-7b",
