@@ -5,6 +5,7 @@ import torch
 from transformers import BitsAndBytesConfig
 device = "cuda:1" if torch.cuda.is_available() else "cpu"
 dtype = torch.bfloat16
+import numpy as np
 
 
 if __name__ == "__main__":
@@ -21,7 +22,8 @@ if __name__ == "__main__":
         for key in data:
             print(
                 f"  └ {key}: type = {type(data[key])}, len = {len(data[key]) if hasattr(data[key], '__len__') else 'N/A'}")
-    print(data["observation.images.table"].shape)
+    arr = np.array(data["observation.images.table"])
+    print(arr.shape)
     exit()
         #
     # import os
