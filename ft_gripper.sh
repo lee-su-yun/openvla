@@ -1,7 +1,7 @@
 
   torchrun \
   --standalone --nnodes 1 --nproc-per-node 1 vla-scripts/finetune_gripper.py \
-  --vla_path "/sda1/openvla-7b" \
+  --vla_path "/sdc1/piper_subtask/openvla/openvla-7b+piper5_hz_subtask+b16+lr-0.0005+lora-r32+dropout-0.0--image_aug" \
   --data_root_dir "/home/sylee/tensorflow_datasets" \
   --dataset_name "piper5_hz_subtask" \
   --run_root_dir "/sdc1/piper_subtask/openvla/gripper" \
