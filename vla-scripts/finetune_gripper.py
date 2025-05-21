@@ -366,9 +366,7 @@ def finetune(cfg: FinetuneConfig) -> None:
             action_preds = action_logits.argmax(dim=2)
             action_gt = batch["labels"][:, 1:].to(action_preds.device)
             mask = action_gt > action_tokenizer.action_token_begin_idx
-            print(action_preds)
-            print(action_gt)
-            exit()
+
             # Compute Accuracy
             correct_preds = (action_preds == action_gt) & mask
             action_accuracy = correct_preds.sum().float() / mask.sum().float()
@@ -381,6 +379,10 @@ def finetune(cfg: FinetuneConfig) -> None:
                 action_tokenizer.decode_token_ids_to_actions(action_gt[mask].cpu().numpy())
             )
             action_l1_loss = torch.nn.functional.l1_loss(continuous_actions_pred, continuous_actions_gt)
+
+            print(continuous_actions_gt)
+            print(continuous_actions_pred)
+            exit()
 
             # Store recent train metrics
             recent_losses.append(loss.item())
