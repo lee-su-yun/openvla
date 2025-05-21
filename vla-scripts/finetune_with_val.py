@@ -317,6 +317,7 @@ def finetune(cfg: FinetuneConfig) -> None:
         num_workers=0
     )
 
+    val_loss, val_acc, val_l1 = evaluate(vla, val_dataloader, device, action_tokenizer)
 
     val_every_n_steps = 100
     # Initialize Logging =>> W&B
