@@ -33,30 +33,30 @@ if __name__ == "__main__":
     import pandas as pd
 
    # 경로 설정
-    source_base = "/sdb1/piper_subtask_data/eval/pick/Validation_add/Pick the yellow cup."
-    target_base = "/sdb1/piper_subtask_data/eval/pick/Val_add_np/Pick the yellow cup."
-
-   # 폴더 없으면 생성
-    os.makedirs(target_base, exist_ok=True)
-
-   # 1~10 에피소드 반복
-    for i in range(1, 11):
-       source_path = os.path.join(source_base, str(i), "episode.pickle")
-       target_path = os.path.join(target_base, f"episode{i}.pickle")
-
-       # DataFrame 로드
-       with open(source_path, "rb") as f:
-           df = pickle.load(f)
-
-       # dict로 변환
-       data_dict = df.to_dict(orient="list")
-
-       # 저장
-       with open(target_path, "wb") as f:
-           pickle.dump(data_dict, f, protocol=4)
-
-       print(f"Saved: {target_path}")
-    exit()
+   #  source_base = "/sdb1/piper_subtask_data/eval/pick/Validation_add/Pick the yellow cup."
+   #  target_base = "/sdb1/piper_subtask_data/eval/pick/Val_add_np/Pick the yellow cup."
+   #
+   # # 폴더 없으면 생성
+   #  os.makedirs(target_base, exist_ok=True)
+   #
+   # # 1~10 에피소드 반복
+   #  for i in range(1, 11):
+   #     source_path = os.path.join(source_base, str(i), "episode.pickle")
+   #     target_path = os.path.join(target_base, f"episode{i}.pickle")
+   #
+   #     # DataFrame 로드
+   #     with open(source_path, "rb") as f:
+   #         df = pickle.load(f)
+   #
+   #     # dict로 변환
+   #     data_dict = df.to_dict(orient="list")
+   #
+   #     # 저장
+   #     with open(target_path, "wb") as f:
+   #         pickle.dump(data_dict, f, protocol=4)
+   #
+   #     print(f"Saved: {target_path}")
+   #  exit()
 
     # Load Processor & VLA
     #model_path = "/sdc1/piper_subtask/openvla/openvla-7b+piper5_hz_subtask+b16+lr-0.0005+lora-r32+dropout-0.0--image_aug"
@@ -134,8 +134,22 @@ if __name__ == "__main__":
 
     #with open("/sdb1/piper_subtask_data/eval/pick/Validation/Pick the blue cup on the right./episode.pickle", "rb") as f:
     with open("/sdb1/piper_subtask_data/eval/pick/Val_np/Pick the blue cup on the right./episode.pickle", "rb") as f:
-    #with open("/sdb1/piper_5hz/validation/Align the cups/111/episode.pickle", "rb") as f:
         data = pickle.load(f)
+
+    with open("/sdb1/piper_subtask_data/eval/pick/Val_np/Pick the yellow cup./episode.pickle", "rb") as f:
+        data1 = pickle.load(f)
+
+    g = []
+    g1 = []
+    for i in range(0, 300, 6):
+        g.append(data['action'][i][0][6])
+        g1.append(data['action'][i][0][6])
+
+    print(g)
+    print(g1)
+    exit()
+
+
     traj_111_latest = []
     #for i in range(50):
     for i in range(0, 300, 6):
