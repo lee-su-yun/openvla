@@ -30,6 +30,7 @@ import torch
 import torch.distributed as dist
 import tqdm
 from accelerate import PartialState
+from numpy.ma.core import sometrue
 from peft import LoraConfig, PeftModel, get_peft_model, prepare_model_for_kbit_training
 from torch.nn.parallel import DistributedDataParallel as DDP
 from torch.optim import AdamW
@@ -113,7 +114,7 @@ class FinetuneConfig:
 def evaluate(vla, val_dataloader, device, action_tokenizer):
     vla.eval()
     val_losses, val_accuracies, val_l1s = [], [], []
-
+    print('hello')
     for i, batch in enumerate(tqdm.tqdm(val_dataloader, desc="Validation", leave=False)):
         if i >= len(val_dataloader):
             break
@@ -149,7 +150,7 @@ def evaluate(vla, val_dataloader, device, action_tokenizer):
         #if gradient_step_idx == cfg.max_steps:
 
     vla.train()  # 다시 학습 모드로 전환
-
+    print('great')
     return (
         sum(val_losses) / len(val_losses),
         sum(val_accuracies) / len(val_accuracies),
@@ -328,7 +329,7 @@ def finetune(cfg: FinetuneConfig) -> None:
     # exit()
     # val_loss, val_acc, val_l1 = evaluate(vla, val_dataloader, device, action_tokenizer)
 
-    val_every_n_steps = 20
+    val_every_n_steps = 5
     # Initialize Logging =>> W&B
     #if distributed_state.is_main_process:
     if True:
@@ -402,6 +403,9 @@ def finetune(cfg: FinetuneConfig) -> None:
                         "train_loss": smoothened_loss,
                         "action_accuracy": smoothened_action_accuracy,
                         "l1_loss": smoothened_l1_loss,
+                        "val_loss": smoothened_loss,
+                        "val_action_accuracy": smoothened_action_accuracy,
+                        "val_l1_loss": smoothened_l1_loss,
                     },
                     step=gradient_step_idx,
                 )
