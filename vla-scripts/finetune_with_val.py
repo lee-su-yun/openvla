@@ -115,8 +115,8 @@ def evaluate(vla, val_dataloader, device, action_tokenizer):
     vla.eval()
     val_losses, val_accuracies, val_l1s = [], [], []
     for i, batch in enumerate(tqdm.tqdm(val_dataloader, desc="Validation", leave=False)):
-        # if i >= len(val_dataloader):
-        if i >= 10:
+        if i >= len(val_dataloader):
+        # if i >= 10:
             break
         with torch.autocast("cuda", dtype=torch.bfloat16):
             output: CausalLMOutputWithPast = vla(
@@ -328,7 +328,7 @@ def finetune(cfg: FinetuneConfig) -> None:
     # exit()
     # val_loss, val_acc, val_l1 = evaluate(vla, val_dataloader, device, action_tokenizer)
 
-    val_every_n_steps = 10*cfg.grad_accumulation_steps
+    val_every_n_steps = 100*cfg.grad_accumulation_steps
     # Initialize Logging =>> W&B
     #if distributed_state.is_main_process:
     if True:
