@@ -113,7 +113,8 @@ class FinetuneConfig:
 def evaluate(vla, dataloader, device, action_tokenizer):
     vla.eval()
     val_losses, val_accuracies, val_l1s = [], [], []
-
+    print(len(dataloader))
+    exit()
     for batch in tqdm.tqdm(dataloader, desc="Validation", leave=False):
 
         with torch.autocast("cuda", dtype=torch.bfloat16):
