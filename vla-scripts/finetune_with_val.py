@@ -436,7 +436,7 @@ def finetune(cfg: FinetuneConfig) -> None:
                 # Block on Main Process Checkpointing
                 dist.barrier()
                 # === Run Validation after Checkpoint ===
-            if gradient_step_idx % val_every_n_steps == 0:
+            if distributed_state.is_main_process and gradient_step_idx % val_every_n_steps == 0:
                 val_loss, val_acc, val_l1 = evaluate(vla, val_dataloader, device_id, action_tokenizer)
                 wandb.log(
                     {
