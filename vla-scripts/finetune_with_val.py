@@ -110,12 +110,13 @@ class FinetuneConfig:
     # fmt: on
 
 @torch.no_grad()
-def evaluate(vla, dataloader, device, action_tokenizer):
+def evaluate(vla, val_dataloader, device, action_tokenizer):
     vla.eval()
     val_losses, val_accuracies, val_l1s = [], [], []
 
-    for batch in tqdm.tqdm(dataloader, desc="Validation", leave=False):
-
+    for i, batch in enumerate(tqdm.tqdm(val_dataloader, desc="Validation", leave=False)):
+        if i >= len(val_dataloader):
+            break
         with torch.autocast("cuda", dtype=torch.bfloat16):
             output: CausalLMOutputWithPast = vla(
                 input_ids=batch["input_ids"].to(device),
@@ -315,17 +316,17 @@ def finetune(cfg: FinetuneConfig) -> None:
         collate_fn=collator,
         num_workers=0
     )
-    print(f"len(dataloader): {len(dataloader)}")
-    print(f"type(dataloader): {type(dataloader)}")
-    print(f"type(dataloader.dataset): {type(dataloader.dataset)}")
+    # print(f"len(dataloader): {len(dataloader)}")
+    # print(f"type(dataloader): {type(dataloader)}")
+    # print(f"type(dataloader.dataset): {type(dataloader.dataset)}")
+    #
+    # print(f"len(dataloader): {len(val_dataloader)}")
+    # print(f"type(dataloader): {type(val_dataloader)}")
+    # print(f"type(dataloader.dataset): {type(val_dataloader.dataset)}")
+    # exit()
+    # val_loss, val_acc, val_l1 = evaluate(vla, val_dataloader, device, action_tokenizer)
 
-    print(f"len(dataloader): {len(val_dataloader)}")
-    print(f"type(dataloader): {type(val_dataloader)}")
-    print(f"type(dataloader.dataset): {type(val_dataloader.dataset)}")
-    exit()
-    val_loss, val_acc, val_l1 = evaluate(vla, val_dataloader, device, action_tokenizer)
-
-    val_every_n_steps = 100
+    val_every_n_steps = 10
     # Initialize Logging =>> W&B
     #if distributed_state.is_main_process:
     if True:
