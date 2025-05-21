@@ -368,6 +368,8 @@ def finetune(cfg: FinetuneConfig) -> None:
             action_gt = batch["labels"][:, 1:].to(action_preds.device)
             mask = action_gt > action_tokenizer.action_token_begin_idx
             print(action_logits.shape)
+            print(action_preds.shape)
+            print(action_gt.shape)
 
             # Compute Accuracy
             correct_preds = (action_preds == action_gt) & mask
