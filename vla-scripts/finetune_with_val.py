@@ -328,7 +328,7 @@ def finetune(cfg: FinetuneConfig) -> None:
     # exit()
     # val_loss, val_acc, val_l1 = evaluate(vla, val_dataloader, device, action_tokenizer)
 
-    val_every_n_steps = 100
+    val_every_n_steps = 20
     # Initialize Logging =>> W&B
     #if distributed_state.is_main_process:
     if True:
