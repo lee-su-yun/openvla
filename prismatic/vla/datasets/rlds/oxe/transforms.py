@@ -846,6 +846,7 @@ def piper5hz_dataset_transform(trajectory: Dict[str, Any]) -> Dict[str, Any]:
 
 # === Registry ===
 OXE_STANDARDIZATION_TRANSFORMS = {
+    "piper5_hz_val": piper5hz_dataset_transform,
     "piper5_hz_subtask": piper5hz_dataset_transform,
     "bridge_oxe": bridge_oxe_dataset_transform,
     "bridge_orig": bridge_orig_dataset_transform,
