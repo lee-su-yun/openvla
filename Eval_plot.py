@@ -143,7 +143,7 @@ if __name__ == "__main__":
     g1 = []
     for i in range(0, 300, 6):
         g.append(data['action'][i][0][6])
-        g1.append(data['action'][i][0][6])
+        g1.append(data1['action'][i][0][6])
 
     print("Top 10 max values:", sorted(g, reverse=True)[:10])
     print("Top 10 min values:", sorted(g)[:10])
