@@ -3,7 +3,7 @@
   --standalone --nnodes 1 --nproc-per-node 1 vla-scripts/finetune.py \
   --vla_path "/sda1/openvla-7b" \
   --data_root_dir "/home/sylee/tensorflow_datasets" \
-  --dataset_name "piper5_hz_subtask:3.0.0" \
+  --dataset_name "piper5_hz_subtask" \
   --run_root_dir "/sdc1/piper_subtask/openvla" \
   --adapter_tmp_dir "/sdc1/piper_subtask/openvla/tmp" \
   --lora_rank 32 \
