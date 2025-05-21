@@ -299,7 +299,7 @@ def finetune(cfg: FinetuneConfig) -> None:
     # Load validation dataset (assume 'val' subdirectory exists in dataset)
     val_dataset = RLDSDataset(
         cfg.data_root_dir,
-        "piper5_hz_subtask:3.0.0",  # or dataset_name + "_val" if you store separately
+        "piper5_hz_val",  # or dataset_name + "_val" if you store separately
         val_batch_transform,
         resize_resolution=tuple(vla.module.config.image_sizes),
         shuffle_buffer_size=1,  # no shuffle needed
@@ -314,6 +314,7 @@ def finetune(cfg: FinetuneConfig) -> None:
     )
 
     print(len(dataloader))
+    print(len(val_dataloader))
     exit()
 
     val_every_n_steps = 100

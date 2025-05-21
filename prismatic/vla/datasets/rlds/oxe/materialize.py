@@ -30,7 +30,7 @@ def make_oxe_dataset_kwargs(
     """Generates config (kwargs) for given dataset from Open-X Embodiment."""
 
 
-    dataset_name = dataset_name.split(":")[0]
+    #dataset_name = dataset_name.split(":")[0]
     dataset_kwargs = deepcopy(OXE_DATASET_CONFIGS[dataset_name])
 
 
@@ -74,7 +74,7 @@ def make_oxe_dataset_kwargs(
 
     # Specify Standardization Transform
 
-    dataset_name = dataset_name.split(":")[0]
+    #dataset_name = dataset_name.split(":")[0]
 
     dataset_kwargs["standardize_fn"] = OXE_STANDARDIZATION_TRANSFORMS[dataset_name]
 
