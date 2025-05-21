@@ -114,8 +114,6 @@ def evaluate(vla, dataloader, device, action_tokenizer):
     vla.eval()
     val_losses, val_accuracies, val_l1s = [], [], []
     #has_data = False
-    print(len(dataloader))
-    exit()
     for batch in dataloader:
         has_data = True
         with torch.autocast("cuda", dtype=torch.bfloat16):
@@ -331,6 +329,7 @@ def finetune(cfg: FinetuneConfig) -> None:
         vla.train()
         optimizer.zero_grad()
         print(len(dataloader))
+        exit()
         for batch_idx, batch in enumerate(dataloader):
             with torch.autocast("cuda", dtype=torch.bfloat16):
                 output: CausalLMOutputWithPast = vla(
