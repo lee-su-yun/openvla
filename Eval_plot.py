@@ -145,8 +145,10 @@ if __name__ == "__main__":
         g.append(data['action'][i][0][6])
         g1.append(data['action'][i][0][6])
 
-    print(g)
-    print(g1)
+    print("Top 10 max values:", sorted(g, reverse=True)[:10])
+    print("Top 10 min values:", sorted(g)[:10])
+    print("Top 10 max values:", sorted(g1, reverse=True)[:10])
+    print("Top 10 min values:", sorted(g1)[:10])
     exit()
 
 
