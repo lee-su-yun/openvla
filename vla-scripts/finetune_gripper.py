@@ -370,6 +370,9 @@ def finetune(cfg: FinetuneConfig) -> None:
             print(action_logits.shape)
             print(action_preds.shape)
             print(action_gt.shape)
+            print(mask)
+            print(action_preds)
+            print(action_gt)
 
             # Compute Accuracy
             correct_preds = (action_preds == action_gt) & mask
