@@ -277,7 +277,8 @@ def finetune(cfg: FinetuneConfig) -> None:
         cfg.data_root_dir,
         cfg.dataset_name,
         batch_transform,
-        resize_resolution=tuple(vla.module.config.image_sizes),
+        #resize_resolution=tuple(vla.module.config.image_sizes),
+        resize_resolution=tuple(vla.config.image_sizes),
         shuffle_buffer_size=cfg.shuffle_buffer_size,
         image_aug=cfg.image_aug,
     )
@@ -304,7 +305,8 @@ def finetune(cfg: FinetuneConfig) -> None:
         cfg.data_root_dir,
         "piper5_hz_val",  # or dataset_name + "_val" if you store separately
         val_batch_transform,
-        resize_resolution=tuple(vla.module.config.image_sizes),
+        #resize_resolution=tuple(vla.module.config.image_sizes),
+        resize_resolution=tuple(vla.config.image_sizes),
         shuffle_buffer_size=1,  # no shuffle needed
         image_aug=False  # important: no augmentation for validation!
     )
