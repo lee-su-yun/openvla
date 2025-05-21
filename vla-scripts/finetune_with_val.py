@@ -217,7 +217,8 @@ def finetune(cfg: FinetuneConfig) -> None:
     if cfg.use_quantization:
         vla = prepare_model_for_kbit_training(vla)
     else:
-        vla = DDP(vla, device_ids=[device.index], find_unused_parameters=True, gradient_as_bucket_view=True)
+        vla = vla.to(device)
+        #vla = DDP(vla, device_ids=[device.index], find_unused_parameters=True, gradient_as_bucket_view=True)
 
     # [LoRA] Wrap Model w/ PEFT `LoraConfig` =>> by default we set `target_modules=all-linear`
     if cfg.use_lora:
@@ -232,10 +233,10 @@ def finetune(cfg: FinetuneConfig) -> None:
         vla.print_trainable_parameters()
 
     # Wrap VLA in PyTorch DDP Wrapper for Multi-GPU Training
-    #vla = DDP(vla, device_ids=[2], find_unused_parameters=True, gradient_as_bucket_view=True)
+    vla = DDP(vla, device_ids=[0], find_unused_parameters=True, gradient_as_bucket_view=True)
     #vla = DDP(vla, device_ids=[device_id], find_unused_parameters=True, gradient_as_bucket_view=True)
     # Move model to device (no DDP)
- #   vla = vla.to(device)
+
 
     # Create Optimizer =>> note that we default to a simple constant learning rate!
     trainable_params = [param for param in vla.parameters() if param.requires_grad]
