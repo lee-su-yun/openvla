@@ -60,7 +60,7 @@ if __name__ == "__main__":
 
     # Load Processor & VLA
     #model_path = "/sdc1/piper_subtask/openvla/openvla-7b+piper5_hz_subtask+b16+lr-0.0005+lora-r32+dropout-0.0--image_aug"
-    model_path = "/sdb1/ckpt/openvla_5hz_n/openvla-7b+piper5_hz+b16+lr-0.0005+lora-r32+dropout-0.0/latest"
+    model_path = "/sdc1/piper_subtask/openvla/addval/openvla-7b+piper5_hz_subtask+b16+lr-0.0005+val+lora-r32+dropout-0.0--image_aug"
     processor = AutoProcessor.from_pretrained(model_path, trust_remote_code=True)
     vla = AutoModelForVision2Seq.from_pretrained(
         #"/sdb1/ckpt/openvla_5hz_n/openvla-7b+piper5_hz+b16+lr-0.0005+lora-r32+dropout-0.0/latest",
@@ -135,21 +135,21 @@ if __name__ == "__main__":
     #with open("/sdb1/piper_subtask_data/eval/pick/Validation/Pick the blue cup on the right./episode.pickle", "rb") as f:
     with open("/sdb1/piper_subtask_data/eval/pick/Val_np/Pick the blue cup on the right./episode.pickle", "rb") as f:
         data = pickle.load(f)
-
-    with open("/sdb1/piper_subtask_data/eval/pick/Val_np/Pick the yellow cup./episode.pickle", "rb") as f:
-        data1 = pickle.load(f)
-
-    g = []
-    g1 = []
-    for i in range(0, 300, 6):
-        g.append(data['action'][i][0][6])
-        g1.append(data1['action'][i][0][6])
-
-    print("Top 10 max values:", sorted(g, reverse=True)[10:20])
-    print("Top 10 min values:", sorted(g)[10:20])
-    print("Top 10 max values:", sorted(g1, reverse=True)[10:20])
-    print("Top 10 min values:", sorted(g1)[10:20])
-    exit()
+    #
+    # with open("/sdb1/piper_subtask_data/eval/pick/Val_np/Pick the yellow cup./episode.pickle", "rb") as f:
+    #     data1 = pickle.load(f)
+    #
+    # g = []
+    # g1 = []
+    # for i in range(0, 300, 6):
+    #     g.append(data['action'][i][0][6])
+    #     g1.append(data1['action'][i][0][6])
+    #
+    # print("Top 10 max values:", sorted(g, reverse=True)[10:20])
+    # print("Top 10 min values:", sorted(g)[10:20])
+    # print("Top 10 max values:", sorted(g1, reverse=True)[10:20])
+    # print("Top 10 min values:", sorted(g1)[10:20])
+    # exit()
 
 
     traj_111_latest = []
@@ -243,10 +243,10 @@ if __name__ == "__main__":
         ),
     )])
     fig_111_latest.show()
-    fig_111_latest.write_html("Pick_the_blue_cup_on_the_right2.html")
+    fig_111_latest.write_html("Pick_the_blue_cup_on_the_right_val.html")
     for i in range(7):
         n = f'71{i + 1}'
         plt.subplot(int(n))
         plt.plot(predictions_111_latest[i], 'b--', gt_111[i], 'r')
-    plt.savefig("Pick_the_blue_cup_on_the_right2.png")
+    plt.savefig("Pick_the_blue_cup_on_the_right_val.png")
     plt.show()
