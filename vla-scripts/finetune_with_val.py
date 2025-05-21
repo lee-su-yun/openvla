@@ -472,7 +472,9 @@ def finetune(cfg: FinetuneConfig) -> None:
                 # === Run Validation after Checkpoint ===
             # if distributed_state.is_main_process and gradient_step_idx % val_every_n_steps == 0:
             #     val_loss, val_acc, val_l1 = evaluate(vla, val_dataloader, device_id, action_tokenizer)
+
             if (gradient_step_idx!=0) and (gradient_step_idx% val_every_n_steps == 0):
+                print(gradient_step_idx)
                 print('bi')
                 val_loss, val_acc, val_l1 = evaluate(vla, val_dataloader, device, action_tokenizer)
                 print('bye')
