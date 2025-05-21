@@ -116,7 +116,8 @@ def evaluate(vla, val_dataloader, device, action_tokenizer):
     val_losses, val_accuracies, val_l1s = [], [], []
     print('hello')
     for i, batch in enumerate(tqdm.tqdm(val_dataloader, desc="Validation", leave=False)):
-        if i >= len(val_dataloader):
+        #if i >= len(val_dataloader):
+        if i >= 10:
             break
         with torch.autocast("cuda", dtype=torch.bfloat16):
             output: CausalLMOutputWithPast = vla(
