@@ -237,6 +237,8 @@ def finetune(cfg: FinetuneConfig) -> None:
     vla = DDP(vla, device_ids=[0], find_unused_parameters=True, gradient_as_bucket_view=True)
     #vla = DDP(vla, device_ids=[device_id], find_unused_parameters=True, gradient_as_bucket_view=True)
     # Move model to device (no DDP)
+    # Save vla.module access to a variable for DDP compatibility
+    model = vla.module if isinstance(vla, DDP) else vla
 
 
     # Create Optimizer =>> note that we default to a simple constant learning rate!
@@ -278,7 +280,7 @@ def finetune(cfg: FinetuneConfig) -> None:
         cfg.data_root_dir,
         cfg.dataset_name,
         batch_transform,
-        resize_resolution=tuple(vla.module.config.image_sizes),
+        resize_resolution=tuple(model.config.image_sizes),
         shuffle_buffer_size=cfg.shuffle_buffer_size,
         image_aug=cfg.image_aug,
     )
@@ -305,7 +307,7 @@ def finetune(cfg: FinetuneConfig) -> None:
         cfg.data_root_dir,
         "piper5_hz_val",  # or dataset_name + "_val" if you store separately
         val_batch_transform,
-        resize_resolution=tuple(vla.module.config.image_sizes),
+        resize_resolution=tuple(model.config.image_sizes),
         shuffle_buffer_size=1,  # no shuffle needed
         image_aug=False  # important: no augmentation for validation!
     )
@@ -326,7 +328,7 @@ def finetune(cfg: FinetuneConfig) -> None:
     # exit()
     # val_loss, val_acc, val_l1 = evaluate(vla, val_dataloader, device, action_tokenizer)
 
-    val_every_n_steps = 10
+    val_every_n_steps = 100
     # Initialize Logging =>> W&B
     #if distributed_state.is_main_process:
     if True:
@@ -346,9 +348,6 @@ def finetune(cfg: FinetuneConfig) -> None:
         for batch_idx, batch in enumerate(dataloader):
             with torch.autocast("cuda", dtype=torch.bfloat16):
                 output: CausalLMOutputWithPast = vla(
-                    # input_ids=batch["input_ids"].to(device_id),
-                    # attention_mask=batch["attention_mask"].to(device_id),
-                    # pixel_values=batch["pixel_values"].to(torch.bfloat16).to(device_id),
                     input_ids=batch["input_ids"].to(device),
                     attention_mask=batch["attention_mask"].to(device),
                     pixel_values=batch["pixel_values"].to(torch.bfloat16).to(device),
@@ -363,7 +362,7 @@ def finetune(cfg: FinetuneConfig) -> None:
             normalized_loss.backward()
 
             # Compute Accuracy and L1 Loss for Logging
-            action_logits = output.logits[:, vla.module.vision_backbone.featurizer.patch_embed.num_patches : -1]
+            action_logits = output.logits[:, model.vision_backbone.featurizer.patch_embed.num_patches : -1]
             action_preds = action_logits.argmax(dim=2)
             action_gt = batch["labels"][:, 1:].to(action_preds.device)
             mask = action_gt > action_tokenizer.action_token_begin_idx
@@ -397,8 +396,7 @@ def finetune(cfg: FinetuneConfig) -> None:
             smoothened_l1_loss = sum(recent_l1_losses) / len(recent_l1_losses)
 
             # Push Metrics to W&B (every 10 gradient steps)
-            #if distributed_state.is_main_process and gradient_step_idx % 10 == 0:
-            if True and gradient_step_idx % 10 == 0:
+            if gradient_step_idx % 10 == 0:
                 wandb.log(
                     {
                         "train_loss": smoothened_loss,
@@ -407,16 +405,18 @@ def finetune(cfg: FinetuneConfig) -> None:
                     },
                     step=gradient_step_idx,
                 )
-                val_loss, val_acc, val_l1 = evaluate(vla, val_dataloader, device, action_tokenizer)
-                wandb.log(
-                    {
-                        "val_loss": val_loss,
-                        "val_action_accuracy": val_acc,
-                        "val_l1_loss": val_l1
-                    },
-                    step=gradient_step_idx,
-                )
-                print(f"Validation step {gradient_step_idx} | loss: {val_loss:.4f}, acc: {val_acc:.4f}, l1: {val_l1:.4f}")
+
+                # # Run validation after wandb.log to avoid interference
+                # val_loss, val_acc, val_l1 = evaluate(vla, val_dataloader, device, action_tokenizer)
+                # wandb.log(
+                #     {
+                #         "val_loss": val_loss,
+                #         "val_action_accuracy": val_acc,
+                #         "val_l1_loss": val_l1
+                #     },
+                #     step=gradient_step_idx,
+                # )
+                # print(f"Validation step {gradient_step_idx} | loss: {val_loss:.4f}, acc: {val_acc:.4f}, l1: {val_l1:.4f}")
 
             # Optimizer Step
             if (batch_idx + 1) % cfg.grad_accumulation_steps == 0:
@@ -435,7 +435,7 @@ def finetune(cfg: FinetuneConfig) -> None:
 
                     # Save Processor & Weights
                     processor.save_pretrained(run_dir)
-                    vla.module.save_pretrained(save_dir)
+                    model.save_pretrained(save_dir)
 
                 # Wait for processor and adapter weights to be saved by main process
     #            dist.barrier()
@@ -467,17 +467,17 @@ def finetune(cfg: FinetuneConfig) -> None:
                 # === Run Validation after Checkpoint ===
             # if distributed_state.is_main_process and gradient_step_idx % val_every_n_steps == 0:
             #     val_loss, val_acc, val_l1 = evaluate(vla, val_dataloader, device_id, action_tokenizer)
-            # if True and gradient_step_idx % val_every_n_steps == 0:
-            #     val_loss, val_acc, val_l1 = evaluate(vla, val_dataloader, device, action_tokenizer)
-            #     wandb.log(
-            #         {
-            #             "val_loss": val_loss,
-            #             "val_action_accuracy": val_acc,
-            #             "val_l1_loss": val_l1
-            #         },
-            #         step=gradient_step_idx,
-            #     )
-            #     print(f"Validation step {gradient_step_idx} | loss: {val_loss:.4f}, acc: {val_acc:.4f}, l1: {val_l1:.4f}")
+            if True and gradient_step_idx % val_every_n_steps == 0:
+                val_loss, val_acc, val_l1 = evaluate(vla, val_dataloader, device, action_tokenizer)
+                wandb.log(
+                    {
+                        "val_loss": val_loss,
+                        "val_action_accuracy": val_acc,
+                        "val_l1_loss": val_l1
+                    },
+                    step=gradient_step_idx,
+                )
+                print(f"Validation step {gradient_step_idx} | loss: {val_loss:.4f}, acc: {val_acc:.4f}, l1: {val_l1:.4f}")
 
             # Stop training when max_steps is reached
             if gradient_step_idx == cfg.max_steps:
