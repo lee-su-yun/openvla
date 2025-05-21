@@ -113,9 +113,7 @@ class FinetuneConfig:
 def evaluate(vla, dataloader, device, action_tokenizer):
     vla.eval()
     val_losses, val_accuracies, val_l1s = [], [], []
-    dataloader = dataloader[:10]
-    print(len(dataloader))
-    exit()
+
     for batch in tqdm.tqdm(dataloader, desc="Validation", leave=False):
 
         with torch.autocast("cuda", dtype=torch.bfloat16):
@@ -317,7 +315,14 @@ def finetune(cfg: FinetuneConfig) -> None:
         collate_fn=collator,
         num_workers=0
     )
+    print(f"len(dataloader): {len(dataloader)}")
+    print(f"type(dataloader): {type(dataloader)}")
+    print(f"type(dataloader.dataset): {type(dataloader.dataset)}")
 
+    print(f"len(dataloader): {len(val_dataloader)}")
+    print(f"type(dataloader): {type(val_dataloader)}")
+    print(f"type(dataloader.dataset): {type(val_dataloader.dataset)}")
+    exit()
     val_loss, val_acc, val_l1 = evaluate(vla, val_dataloader, device, action_tokenizer)
 
     val_every_n_steps = 100
