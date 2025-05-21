@@ -114,11 +114,10 @@ class FinetuneConfig:
 def evaluate(vla, val_dataloader, device, action_tokenizer):
     vla.eval()
     val_losses, val_accuracies, val_l1s = [], [], []
-    print('hello')
     for i, batch in enumerate(tqdm.tqdm(val_dataloader, desc="Validation", leave=False)):
-        #if i >= len(val_dataloader):
-        if i >= 10:
-            break
+        # if i >= len(val_dataloader):
+        # if i >= 10:
+        #     break
         with torch.autocast("cuda", dtype=torch.bfloat16):
             output: CausalLMOutputWithPast = vla(
                 input_ids=batch["input_ids"].to(device),
@@ -151,7 +150,6 @@ def evaluate(vla, val_dataloader, device, action_tokenizer):
         #if gradient_step_idx == cfg.max_steps:
 
     vla.train()  # 다시 학습 모드로 전환
-    print('great')
     return (
         sum(val_losses) / len(val_losses),
         sum(val_accuracies) / len(val_accuracies),
@@ -330,7 +328,7 @@ def finetune(cfg: FinetuneConfig) -> None:
     # exit()
     # val_loss, val_acc, val_l1 = evaluate(vla, val_dataloader, device, action_tokenizer)
 
-    val_every_n_steps = 5
+    val_every_n_steps = 10*cfg.grad_accumulation_steps
     # Initialize Logging =>> W&B
     #if distributed_state.is_main_process:
     if True:
@@ -404,9 +402,6 @@ def finetune(cfg: FinetuneConfig) -> None:
                         "train_loss": smoothened_loss,
                         "action_accuracy": smoothened_action_accuracy,
                         "l1_loss": smoothened_l1_loss,
-                        "val_loss": smoothened_loss,
-                        "val_action_accuracy": smoothened_action_accuracy,
-                        "val_l1_loss": smoothened_l1_loss,
                     },
                     step=gradient_step_idx,
                 )
@@ -473,11 +468,8 @@ def finetune(cfg: FinetuneConfig) -> None:
             # if distributed_state.is_main_process and gradient_step_idx % val_every_n_steps == 0:
             #     val_loss, val_acc, val_l1 = evaluate(vla, val_dataloader, device_id, action_tokenizer)
 
-            if (gradient_step_idx!=0) and (gradient_step_idx% val_every_n_steps == 0):
-                print(gradient_step_idx)
-                print('bi')
+            if (batch_idx + 1) % val_every_n_steps == 0:
                 val_loss, val_acc, val_l1 = evaluate(vla, val_dataloader, device, action_tokenizer)
-                print('bye')
                 wandb.log(
                     {
                         "val_loss": val_loss,
