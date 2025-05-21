@@ -314,7 +314,7 @@ def finetune(cfg: FinetuneConfig) -> None:
     )
 
 
-    val_every_n_steps = 10
+    val_every_n_steps = 100
     # Initialize Logging =>> W&B
     if distributed_state.is_main_process:
         wandb.init(entity=cfg.wandb_entity, project=cfg.wandb_project, name=f"ft+{exp_id}")
