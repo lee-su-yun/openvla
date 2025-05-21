@@ -354,6 +354,7 @@ def finetune(cfg: FinetuneConfig) -> None:
                     labels=batch["labels"],
                 )
                 loss = output.loss
+            print(loss)
 
             # Normalize loss to account for gradient accumulation
             normalized_loss = loss / cfg.grad_accumulation_steps
@@ -366,6 +367,7 @@ def finetune(cfg: FinetuneConfig) -> None:
             action_preds = action_logits.argmax(dim=2)
             action_gt = batch["labels"][:, 1:].to(action_preds.device)
             mask = action_gt > action_tokenizer.action_token_begin_idx
+            print(action_logits)
 
             # Compute Accuracy
             correct_preds = (action_preds == action_gt) & mask
@@ -382,6 +384,7 @@ def finetune(cfg: FinetuneConfig) -> None:
 
             print(continuous_actions_gt)
             print(continuous_actions_pred)
+            print(action_l1_loss)
             exit()
 
             # Store recent train metrics
