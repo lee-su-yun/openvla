@@ -313,9 +313,6 @@ def finetune(cfg: FinetuneConfig) -> None:
         num_workers=0
     )
 
-    print(len(dataloader))
-    print(len(val_dataloader))
-    exit()
 
     val_every_n_steps = 100
     # Initialize Logging =>> W&B
