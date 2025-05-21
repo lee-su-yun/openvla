@@ -113,6 +113,7 @@ class FinetuneConfig:
 def evaluate(vla, dataloader, device, action_tokenizer):
     vla.eval()
     val_losses, val_accuracies, val_l1s = [], [], []
+    dataloader = dataloader[:10]
     print(len(dataloader))
     exit()
     for batch in tqdm.tqdm(dataloader, desc="Validation", leave=False):
