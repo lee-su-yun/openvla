@@ -313,6 +313,9 @@ def finetune(cfg: FinetuneConfig) -> None:
         num_workers=0
     )
 
+    print(len(dataloader))
+    exit()
+
     val_every_n_steps = 100
     # Initialize Logging =>> W&B
     if distributed_state.is_main_process:
@@ -328,8 +331,7 @@ def finetune(cfg: FinetuneConfig) -> None:
         print("Starting training loop")
         vla.train()
         optimizer.zero_grad()
-        print(len(dataloader))
-        exit()
+
         for batch_idx, batch in enumerate(dataloader):
             with torch.autocast("cuda", dtype=torch.bfloat16):
                 output: CausalLMOutputWithPast = vla(
