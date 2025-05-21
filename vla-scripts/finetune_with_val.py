@@ -217,8 +217,7 @@ def finetune(cfg: FinetuneConfig) -> None:
     if cfg.use_quantization:
         vla = prepare_model_for_kbit_training(vla)
     else:
-        vla = vla.to(device)
-        #vla = vla.to(device_id)
+        vla = DDP(vla, device_ids=[device.index], find_unused_parameters=True, gradient_as_bucket_view=True)
 
     # [LoRA] Wrap Model w/ PEFT `LoraConfig` =>> by default we set `target_modules=all-linear`
     if cfg.use_lora:
@@ -236,7 +235,7 @@ def finetune(cfg: FinetuneConfig) -> None:
     #vla = DDP(vla, device_ids=[2], find_unused_parameters=True, gradient_as_bucket_view=True)
     #vla = DDP(vla, device_ids=[device_id], find_unused_parameters=True, gradient_as_bucket_view=True)
     # Move model to device (no DDP)
-    vla = vla.to(device)
+ #   vla = vla.to(device)
 
     # Create Optimizer =>> note that we default to a simple constant learning rate!
     trainable_params = [param for param in vla.parameters() if param.requires_grad]
@@ -277,8 +276,7 @@ def finetune(cfg: FinetuneConfig) -> None:
         cfg.data_root_dir,
         cfg.dataset_name,
         batch_transform,
-        #resize_resolution=tuple(vla.module.config.image_sizes),
-        resize_resolution=tuple(vla.config.image_sizes),
+        resize_resolution=tuple(vla.module.config.image_sizes),
         shuffle_buffer_size=cfg.shuffle_buffer_size,
         image_aug=cfg.image_aug,
     )
@@ -305,8 +303,7 @@ def finetune(cfg: FinetuneConfig) -> None:
         cfg.data_root_dir,
         "piper5_hz_val",  # or dataset_name + "_val" if you store separately
         val_batch_transform,
-        #resize_resolution=tuple(vla.module.config.image_sizes),
-        resize_resolution=tuple(vla.config.image_sizes),
+        resize_resolution=tuple(vla.module.config.image_sizes),
         shuffle_buffer_size=1,  # no shuffle needed
         image_aug=False  # important: no augmentation for validation!
     )
