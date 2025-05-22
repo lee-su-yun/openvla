@@ -331,8 +331,8 @@ def finetune(cfg: FinetuneConfig) -> None:
     val_every_n_steps = 100*cfg.grad_accumulation_steps
     # Initialize Logging =>> W&B
     #if distributed_state.is_main_process:
-    if True:
-        wandb.init(entity=cfg.wandb_entity, project=cfg.wandb_project, name=f"ft+{exp_id}")
+    # if True:
+    #     wandb.init(entity=cfg.wandb_entity, project=cfg.wandb_project, name=f"ft+{exp_id}")
 
     # Deque to store recent train metrics (used for computing smoothened metrics for gradient accumulation)
     recent_losses = deque(maxlen=cfg.grad_accumulation_steps)
@@ -367,8 +367,8 @@ def finetune(cfg: FinetuneConfig) -> None:
             action_gt = batch["labels"][:, 1:].to(action_preds.device)
             mask = action_gt > action_tokenizer.action_token_begin_idx
 
-            print(action_logits.shape)
-            print(action_tokenizer.action_token_begin_idx)
+            print(action_preds)
+            # print(action_tokenizer.action_token_begin_idx)
             exit()
 
             # Compute Accuracy
