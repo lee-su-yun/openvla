@@ -103,7 +103,7 @@ def normalize_action_and_proprio(traj: Dict, metadata: Dict, normalization_type:
     raise ValueError(f"Unknown Normalization Type {normalization_type}")
 
 def invert_piper_gripper(actions: tf.Tensor) -> tf.Tensor:
-    actions = tf.cast(actions, tf.float32)
+    # actions = tf.cast(actions, tf.float32)
     return (actions + 1.0) / 2.0
 
 def binarize_gripper_actions(actions: tf.Tensor) -> tf.Tensor:

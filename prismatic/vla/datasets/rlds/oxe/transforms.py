@@ -844,8 +844,8 @@ def libero_dataset_transform(trajectory: Dict[str, Any]) -> Dict[str, Any]:
 def piper5hz_dataset_transform(trajectory: Dict[str, Any]) -> Dict[str, Any]:
     # 그대로 반환 (identity transform)
     actions = trajectory["action"]
-    normalized_first6 = invert_piper_gripper(actions[:, :6])
-    trajectory["action"] = tf.concat([normalized_first6, actions[:, 6:]], axis=-1)
+    gripper = (tf.cast(actions[:, -1:], tf.float32) + 1.0) / 2.0
+    trajectory["action"] = tf.concat([actions[:, :-1], gripper], axis=-1)
     return trajectory
 
 # === Registry ===
