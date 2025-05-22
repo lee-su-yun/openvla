@@ -166,7 +166,7 @@ def finetune(cfg: FinetuneConfig) -> None:
     assert torch.cuda.is_available(), "Fine-tuning assumes at least one GPU is available!"
     # distributed_state = PartialState()
     # torch.cuda.set_device(device_id := distributed_state.local_process_index)
-    device = torch.device("cuda:2")
+    device = torch.device("cuda:1")
     torch.cuda.set_device(device)
     torch.cuda.empty_cache()
 
@@ -184,7 +184,7 @@ def finetune(cfg: FinetuneConfig) -> None:
     if cfg.run_id_note is not None:
         exp_id += f"--{cfg.run_id_note}"
     if cfg.image_aug:
-        exp_id += "--image_aug"
+        exp_id += "--image_aug+norm+bin"
 
     # Start =>> Build Directories
     run_dir, adapter_dir = cfg.run_root_dir / exp_id, cfg.adapter_tmp_dir / exp_id
@@ -234,7 +234,7 @@ def finetune(cfg: FinetuneConfig) -> None:
         vla.print_trainable_parameters()
 
     # Wrap VLA in PyTorch DDP Wrapper for Multi-GPU Training
-    vla = DDP(vla, device_ids=[2], find_unused_parameters=True, gradient_as_bucket_view=True)
+    vla = DDP(vla, device_ids=[0], find_unused_parameters=True, gradient_as_bucket_view=True)
     #vla = DDP(vla, device_ids=[device_id], find_unused_parameters=True, gradient_as_bucket_view=True)
     # Move model to device (no DDP)
     # Save vla.module access to a variable for DDP compatibility
@@ -331,7 +331,7 @@ def finetune(cfg: FinetuneConfig) -> None:
     val_every_n_steps = 100*cfg.grad_accumulation_steps
     # Initialize Logging =>> W&B
     #if distributed_state.is_main_process:
-    if False:
+    if True:
         wandb.init(entity=cfg.wandb_entity, project=cfg.wandb_project, name=f"ft+{exp_id}")
 
     # Deque to store recent train metrics (used for computing smoothened metrics for gradient accumulation)
@@ -354,7 +354,6 @@ def finetune(cfg: FinetuneConfig) -> None:
                     labels=batch["labels"],
                 )
                 loss = output.loss
-            # print(loss)
 
             # Normalize loss to account for gradient accumulation
             normalized_loss = loss / cfg.grad_accumulation_steps
@@ -367,12 +366,6 @@ def finetune(cfg: FinetuneConfig) -> None:
             action_preds = action_logits.argmax(dim=2)
             action_gt = batch["labels"][:, 1:].to(action_preds.device)
             mask = action_gt > action_tokenizer.action_token_begin_idx
-            # print(action_logits.shape)
-            # print(action_preds.shape)
-            # print(action_gt.shape)
-            # print(mask)
-            # print(action_preds)
-            # print(action_gt)
 
             # Compute Accuracy
             correct_preds = (action_preds == action_gt) & mask
@@ -386,12 +379,6 @@ def finetune(cfg: FinetuneConfig) -> None:
                 action_tokenizer.decode_token_ids_to_actions(action_gt[mask].cpu().numpy())
             )
             action_l1_loss = torch.nn.functional.l1_loss(continuous_actions_pred, continuous_actions_gt)
-
-
-            # print(continuous_actions_gt)
-            # print(continuous_actions_pred)
-            # print(action_l1_loss)
-            # exit()
 
             # Store recent train metrics
             recent_losses.append(loss.item())
