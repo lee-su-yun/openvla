@@ -234,7 +234,7 @@ def finetune(cfg: FinetuneConfig) -> None:
         vla.print_trainable_parameters()
 
     # Wrap VLA in PyTorch DDP Wrapper for Multi-GPU Training
-    vla = DDP(vla, device_ids=[0], find_unused_parameters=True, gradient_as_bucket_view=True)
+    vla = DDP(vla, device_ids=[1], find_unused_parameters=True, gradient_as_bucket_view=True)
     #vla = DDP(vla, device_ids=[device_id], find_unused_parameters=True, gradient_as_bucket_view=True)
     # Move model to device (no DDP)
     # Save vla.module access to a variable for DDP compatibility
