@@ -368,6 +368,7 @@ def finetune(cfg: FinetuneConfig) -> None:
             mask = action_gt > action_tokenizer.action_token_begin_idx
 
             print(action_logits.shape)
+            print(action_tokenizer.action_token_begin_idx)
             exit()
 
             # Compute Accuracy
