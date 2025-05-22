@@ -258,7 +258,7 @@ if __name__ == "__main__":
 
 
     #with open("/sdb1/piper_subtask_data/eval/pick/Validation/Pick the blue cup on the right./episode.pickle", "rb") as f:
-    with open("/sdb1/piper_subtask_data/eval/pick/Val_np/Pick the blue cup on the right./episode.pickle", "rb") as f:
+    with open("/sdb1/piper_subtask_data/eval/pick/Val_np/Pick the white cup nearest from the robot./episode.pickle", "rb") as f:
         data = pickle.load(f)
     #
     # with open("/sdb1/piper_subtask_data/eval/pick/Val_np/Pick the yellow cup./episode.pickle", "rb") as f:
@@ -281,7 +281,7 @@ if __name__ == "__main__":
     #for i in range(50):
     for i in range(0, 300, 6):
         image = Image.fromarray(data['observation.images.table'][i][0])
-        prompt = "In: What should the robot do to pick the blue cup on the right?\nOut:"
+        prompt = "In: What should the robot do to pick the white cup nearest from the robot?\nOut:"
         inputs = processor(prompt, image).to(device, dtype=torch.bfloat16)
         action = vla.predict_action(**inputs, unnorm_key="piper5_hz", do_sample=False)
         traj_111_latest.append(action)
@@ -368,10 +368,10 @@ if __name__ == "__main__":
         ),
     )])
     fig_111_latest.show()
-    fig_111_latest.write_html("Pick_the_blue_cup_on_the_right_val.html")
+    fig_111_latest.write_html("Pick_the_white_cup_nearest_from_the_robot.html")
     for i in range(7):
         n = f'71{i + 1}'
         plt.subplot(int(n))
         plt.plot(predictions_111_latest[i], 'b--', gt_111[i], 'r')
-    plt.savefig("Pick_the_blue_cup_on_the_right_val.png")
+    plt.savefig("Pick_the_white_cup_nearest_from_the_robot.png")
     plt.show()
