@@ -159,13 +159,13 @@ if __name__ == "__main__":
                 73382.73000000001
             ],
             "mask": [
-                true,
-                true,
-                true,
-                true,
-                true,
-                true,
-                false
+                True,
+                True,
+                True,
+                True,
+                True,
+                True,
+                False
             ]
         },
         "proprio": {
