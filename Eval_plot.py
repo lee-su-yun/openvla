@@ -329,6 +329,7 @@ if __name__ == "__main__":
         ry.append(data['action'][i][0][4])
         rz.append(data['action'][i][0][5])
         g.append(data['action'][i][0][6])
+    print(g)
     gt_111.append(x)
     gt_111.append(y)
     gt_111.append(z)
