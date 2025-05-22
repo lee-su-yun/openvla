@@ -367,7 +367,7 @@ def finetune(cfg: FinetuneConfig) -> None:
             action_gt = batch["labels"][:, 1:].to(action_preds.device)
             mask = action_gt > action_tokenizer.action_token_begin_idx
 
-            print(action_preds)
+            print(action_logits[0][-2][31743:31999])
             # print(action_tokenizer.action_token_begin_idx)
             exit()
 
