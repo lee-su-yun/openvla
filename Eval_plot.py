@@ -3,7 +3,7 @@ from transformers import AutoModelForVision2Seq, AutoProcessor
 from PIL import Image
 import torch
 from transformers import BitsAndBytesConfig
-device = "cuda:0" if torch.cuda.is_available() else "cpu"
+device = "cuda:1" if torch.cuda.is_available() else "cpu"
 dtype = torch.bfloat16
 import numpy as np
 
