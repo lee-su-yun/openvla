@@ -270,7 +270,7 @@ if __name__ == "__main__":
     #for i in range(50):
     for i in range(0, 300, 6):
         image = Image.fromarray(data['observation.images.table'][i][0])
-        prompt = "In: What should the robot do to move right?\nOut:"
+        prompt = "In: What should the robot do to pick the yellow cup?\nOut:"
         inputs = processor(prompt, image).to(device, dtype=torch.bfloat16)
         action = vla.predict_action(**inputs, unnorm_key="piper5_hz", do_sample=False)
         traj_111_latest.append(action)
