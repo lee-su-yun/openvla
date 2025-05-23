@@ -300,12 +300,7 @@ if __name__ == "__main__":
 
 
 
-    # 7개의 리스트를 50개의 (7,) 벡터로 전치
-    trajectory_array = np.stack(predictions_111_latest, axis=1)  # shape: (50, 7)
 
-    # 저장
-    np.save("predictions_111_latest.npy", trajectory_array)
-    exit()
 
 
     import plotly.graph_objects as go
@@ -335,6 +330,12 @@ if __name__ == "__main__":
     gt_111.append(ry)
     gt_111.append(rz)
     gt_111.append(g)
+# 7개의 리스트를 50개의 (7,) 벡터로 전치
+    trajectory_array = np.stack(gt_111, axis=1)  # shape: (50, 7)
+
+    # 저장
+    np.save("gt_111_latest.npy", trajectory_array)
+    exit()
     fig_111_latest = go.Figure(data=[go.Scatter3d(
         x=predictions_111_latest[0], y=predictions_111_latest[1], z=predictions_111_latest[2],
         mode='lines+markers',
