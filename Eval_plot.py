@@ -270,7 +270,7 @@ if __name__ == "__main__":
     #for i in range(50):
     for i in range(0, 300, 6):
         image = Image.fromarray(data['observation.images.table'][i][0])
-        prompt = "In: What should the robot do to pick the blue cup on the right?\nOut:"
+        prompt = "In: What should the robot do to pick the blue cup on the left?\nOut:"
         inputs = processor(prompt, image).to(device, dtype=torch.bfloat16)
         action = vla.predict_action(**inputs, unnorm_key="piper5_hz", do_sample=False)
         traj_111_latest.append(action)
@@ -369,334 +369,334 @@ if __name__ == "__main__":
     plt.savefig("Pick_the_blue_cup_on_the_right.png")
     plt.show()
 
-#######################################################################################
-#######################################################################################
-
-    with open("/sdb1/piper_subtask_data/eval/pick/Val_np/Pick the white cup nearest from the robot./episode.pickle",
-              "rb") as f:
-        data = pickle.load(f)
-
-    traj_111_latest = []
-    # for i in range(50):
-    for i in range(0, 300, 6):
-        image = Image.fromarray(data['observation.images.table'][i][0])
-        prompt = "In: What should the robot do to pick the white cup nearest from the robot?\nOut:"
-        inputs = processor(prompt, image).to(device, dtype=torch.bfloat16)
-        action = vla.predict_action(**inputs, unnorm_key="piper5_hz", do_sample=False)
-        traj_111_latest.append(action)
-    predictions_111_latest = []
-    x = []
-    y = []
-    z = []
-    rx = []
-    ry = []
-    rz = []
-    g = []
-    for i in range(50):
-        x.append(traj_111_latest[i][0])
-        y.append(traj_111_latest[i][1])
-        z.append(traj_111_latest[i][2])
-        rx.append(traj_111_latest[i][3])
-        ry.append(traj_111_latest[i][4])
-        rz.append(traj_111_latest[i][5])
-        g.append(traj_111_latest[i][6])
-    predictions_111_latest.append(x)
-    predictions_111_latest.append(y)
-    predictions_111_latest.append(z)
-    predictions_111_latest.append(rx)
-    predictions_111_latest.append(ry)
-    predictions_111_latest.append(rz)
-    predictions_111_latest.append(g)
-
-    import plotly.graph_objects as go
-    import numpy as np
-
-    timesteps = np.arange(50)
-    import matplotlib.pyplot as plt
-
-    gt_111 = []
-    x = []
-    y = []
-    z = []
-    rx = []
-    ry = []
-    rz = []
-    g = []
-    for i in range(0, 300, 6):
-        x.append(data['action'][i][0][0])
-        y.append(data['action'][i][0][1])
-        z.append(data['action'][i][0][2])
-        rx.append(data['action'][i][0][3])
-        ry.append(data['action'][i][0][4])
-        rz.append(data['action'][i][0][5])
-        g.append(data['action'][i][0][6])
-    gt_111.append(x)
-    gt_111.append(y)
-    gt_111.append(z)
-    gt_111.append(rx)
-    gt_111.append(ry)
-    gt_111.append(rz)
-    gt_111.append(g)
-    fig_111_latest = go.Figure(data=[go.Scatter3d(
-        x=predictions_111_latest[0], y=predictions_111_latest[1], z=predictions_111_latest[2],
-        mode='lines+markers',
-        marker=dict(
-            size=10,
-            color=timesteps,
-            symbol="circle",
-            colorscale='Viridis',  # 기본 색상 스케일 (Viridis)
-            colorbar=dict(title='Timestep')  # 색상 바 제목
-        ),
-        line=dict(
-            color=timesteps,  # 선 색상도 timestep에 따라 변함
-            colorscale='Viridis',  # 동일한 색상 스케일
-            width=4
-        ),
-    ), go.Scatter3d(
-        x=gt_111[0], y=gt_111[1], z=gt_111[2],
-        mode='lines+markers',
-        marker=dict(
-            size=10,
-            color=timesteps,  # 색상 배열을 적용
-            symbol="square",
-            colorscale='Viridis',  # 기본 색상 스케일 (Viridis)
-            colorbar=dict(title='Timestep')  # 색상 바 제목
-        ),
-        line=dict(
-            color=timesteps,  # 선 색상도 timestep에 따라 변함
-            colorscale='Viridis',  # 동일한 색상 스케일
-            width=4
-        ),
-    )])
-    fig_111_latest.show()
-    fig_111_latest.write_html("Pick_the_white_cup_nearest_from_the_robot.html")
-    # Pick_the_blue_cup_on_the_right
-    # Pick_the_white_cup_nearest_from_the_robot
-    # Pick_the_red_cup_behind_the_purple_one
-    # Pick_the_yellow_cup
-    for i in range(7):
-        n = f'71{i + 1}'
-        plt.subplot(int(n))
-        plt.plot(predictions_111_latest[i], 'b--', gt_111[i], 'r')
-    plt.savefig("Pick_the_white_cup_nearest_from_the_robot.png")
-    plt.show()
-
-    with open("/sdb1/piper_subtask_data/eval/pick/Val_np/Pick the red cup behind the purple one./episode.pickle",
-              "rb") as f:
-        data = pickle.load(f)
-
-    traj_111_latest = []
-    # for i in range(50):
-    for i in range(0, 300, 6):
-        image = Image.fromarray(data['observation.images.table'][i][0])
-        prompt = "In: What should the robot do to pick the red cup behind the purple one?\nOut:"
-        inputs = processor(prompt, image).to(device, dtype=torch.bfloat16)
-        action = vla.predict_action(**inputs, unnorm_key="piper5_hz", do_sample=False)
-        traj_111_latest.append(action)
-    predictions_111_latest = []
-    x = []
-    y = []
-    z = []
-    rx = []
-    ry = []
-    rz = []
-    g = []
-    for i in range(50):
-        x.append(traj_111_latest[i][0])
-        y.append(traj_111_latest[i][1])
-        z.append(traj_111_latest[i][2])
-        rx.append(traj_111_latest[i][3])
-        ry.append(traj_111_latest[i][4])
-        rz.append(traj_111_latest[i][5])
-        g.append(traj_111_latest[i][6])
-    predictions_111_latest.append(x)
-    predictions_111_latest.append(y)
-    predictions_111_latest.append(z)
-    predictions_111_latest.append(rx)
-    predictions_111_latest.append(ry)
-    predictions_111_latest.append(rz)
-    predictions_111_latest.append(g)
-
-    import plotly.graph_objects as go
-    import numpy as np
-
-    timesteps = np.arange(50)
-    import matplotlib.pyplot as plt
-
-    gt_111 = []
-    x = []
-    y = []
-    z = []
-    rx = []
-    ry = []
-    rz = []
-    g = []
-    for i in range(0, 300, 6):
-        x.append(data['action'][i][0][0])
-        y.append(data['action'][i][0][1])
-        z.append(data['action'][i][0][2])
-        rx.append(data['action'][i][0][3])
-        ry.append(data['action'][i][0][4])
-        rz.append(data['action'][i][0][5])
-        g.append(data['action'][i][0][6])
-    gt_111.append(x)
-    gt_111.append(y)
-    gt_111.append(z)
-    gt_111.append(rx)
-    gt_111.append(ry)
-    gt_111.append(rz)
-    gt_111.append(g)
-    fig_111_latest = go.Figure(data=[go.Scatter3d(
-        x=predictions_111_latest[0], y=predictions_111_latest[1], z=predictions_111_latest[2],
-        mode='lines+markers',
-        marker=dict(
-            size=10,
-            color=timesteps,
-            symbol="circle",
-            colorscale='Viridis',  # 기본 색상 스케일 (Viridis)
-            colorbar=dict(title='Timestep')  # 색상 바 제목
-        ),
-        line=dict(
-            color=timesteps,  # 선 색상도 timestep에 따라 변함
-            colorscale='Viridis',  # 동일한 색상 스케일
-            width=4
-        ),
-    ), go.Scatter3d(
-        x=gt_111[0], y=gt_111[1], z=gt_111[2],
-        mode='lines+markers',
-        marker=dict(
-            size=10,
-            color=timesteps,  # 색상 배열을 적용
-            symbol="square",
-            colorscale='Viridis',  # 기본 색상 스케일 (Viridis)
-            colorbar=dict(title='Timestep')  # 색상 바 제목
-        ),
-        line=dict(
-            color=timesteps,  # 선 색상도 timestep에 따라 변함
-            colorscale='Viridis',  # 동일한 색상 스케일
-            width=4
-        ),
-    )])
-    fig_111_latest.show()
-    fig_111_latest.write_html("Pick_the_red_cup_behind_the_purple_one.html")
-    # Pick_the_blue_cup_on_the_right
-    # Pick_the_white_cup_nearest_from_the_robot
-    # Pick_the_red_cup_behind_the_purple_one
-    # Pick_the_yellow_cup
-    for i in range(7):
-        n = f'71{i + 1}'
-        plt.subplot(int(n))
-        plt.plot(predictions_111_latest[i], 'b--', gt_111[i], 'r')
-    plt.savefig("Pick_the_red_cup_behind_the_purple_one.png")
-    plt.show()
-
-    with open("/sdb1/piper_subtask_data/eval/pick/Val_np/Pick the yellow cup./episode.pickle",
-              "rb") as f:
-        data = pickle.load(f)
-
-    traj_111_latest = []
-    # for i in range(50):
-    for i in range(0, 300, 6):
-        image = Image.fromarray(data['observation.images.table'][i][0])
-        prompt = "In: What should the robot do to pick the yellow cup?\nOut:"
-        inputs = processor(prompt, image).to(device, dtype=torch.bfloat16)
-        action = vla.predict_action(**inputs, unnorm_key="piper5_hz", do_sample=False)
-        traj_111_latest.append(action)
-    predictions_111_latest = []
-    x = []
-    y = []
-    z = []
-    rx = []
-    ry = []
-    rz = []
-    g = []
-    for i in range(50):
-        x.append(traj_111_latest[i][0])
-        y.append(traj_111_latest[i][1])
-        z.append(traj_111_latest[i][2])
-        rx.append(traj_111_latest[i][3])
-        ry.append(traj_111_latest[i][4])
-        rz.append(traj_111_latest[i][5])
-        g.append(traj_111_latest[i][6])
-    predictions_111_latest.append(x)
-    predictions_111_latest.append(y)
-    predictions_111_latest.append(z)
-    predictions_111_latest.append(rx)
-    predictions_111_latest.append(ry)
-    predictions_111_latest.append(rz)
-    predictions_111_latest.append(g)
-
-    import plotly.graph_objects as go
-    import numpy as np
-
-    timesteps = np.arange(50)
-    import matplotlib.pyplot as plt
-
-    gt_111 = []
-    x = []
-    y = []
-    z = []
-    rx = []
-    ry = []
-    rz = []
-    g = []
-    for i in range(0, 300, 6):
-        x.append(data['action'][i][0][0])
-        y.append(data['action'][i][0][1])
-        z.append(data['action'][i][0][2])
-        rx.append(data['action'][i][0][3])
-        ry.append(data['action'][i][0][4])
-        rz.append(data['action'][i][0][5])
-        g.append(data['action'][i][0][6])
-    gt_111.append(x)
-    gt_111.append(y)
-    gt_111.append(z)
-    gt_111.append(rx)
-    gt_111.append(ry)
-    gt_111.append(rz)
-    gt_111.append(g)
-    fig_111_latest = go.Figure(data=[go.Scatter3d(
-        x=predictions_111_latest[0], y=predictions_111_latest[1], z=predictions_111_latest[2],
-        mode='lines+markers',
-        marker=dict(
-            size=10,
-            color=timesteps,
-            symbol="circle",
-            colorscale='Viridis',  # 기본 색상 스케일 (Viridis)
-            colorbar=dict(title='Timestep')  # 색상 바 제목
-        ),
-        line=dict(
-            color=timesteps,  # 선 색상도 timestep에 따라 변함
-            colorscale='Viridis',  # 동일한 색상 스케일
-            width=4
-        ),
-    ), go.Scatter3d(
-        x=gt_111[0], y=gt_111[1], z=gt_111[2],
-        mode='lines+markers',
-        marker=dict(
-            size=10,
-            color=timesteps,  # 색상 배열을 적용
-            symbol="square",
-            colorscale='Viridis',  # 기본 색상 스케일 (Viridis)
-            colorbar=dict(title='Timestep')  # 색상 바 제목
-        ),
-        line=dict(
-            color=timesteps,  # 선 색상도 timestep에 따라 변함
-            colorscale='Viridis',  # 동일한 색상 스케일
-            width=4
-        ),
-    )])
-    fig_111_latest.show()
-    fig_111_latest.write_html("Pick_the_yellow_cup.html")
-    # Pick_the_blue_cup_on_the_right
-    # Pick_the_white_cup_nearest_from_the_robot
-    # Pick_the_red_cup_behind_the_purple_one
-    # Pick_the_yellow_cup
-    for i in range(7):
-        n = f'71{i + 1}'
-        plt.subplot(int(n))
-        plt.plot(predictions_111_latest[i], 'b--', gt_111[i], 'r')
-    plt.savefig("Pick_the_yellow_cup.png")
-    plt.show()
-
-
+# #######################################################################################
+# #######################################################################################
+#
+#     with open("/sdb1/piper_subtask_data/eval/pick/Val_np/Pick the white cup nearest from the robot./episode.pickle",
+#               "rb") as f:
+#         data = pickle.load(f)
+#
+#     traj_111_latest = []
+#     # for i in range(50):
+#     for i in range(0, 300, 6):
+#         image = Image.fromarray(data['observation.images.table'][i][0])
+#         prompt = "In: What should the robot do to pick the white cup nearest from the robot?\nOut:"
+#         inputs = processor(prompt, image).to(device, dtype=torch.bfloat16)
+#         action = vla.predict_action(**inputs, unnorm_key="piper5_hz", do_sample=False)
+#         traj_111_latest.append(action)
+#     predictions_111_latest = []
+#     x = []
+#     y = []
+#     z = []
+#     rx = []
+#     ry = []
+#     rz = []
+#     g = []
+#     for i in range(50):
+#         x.append(traj_111_latest[i][0])
+#         y.append(traj_111_latest[i][1])
+#         z.append(traj_111_latest[i][2])
+#         rx.append(traj_111_latest[i][3])
+#         ry.append(traj_111_latest[i][4])
+#         rz.append(traj_111_latest[i][5])
+#         g.append(traj_111_latest[i][6])
+#     predictions_111_latest.append(x)
+#     predictions_111_latest.append(y)
+#     predictions_111_latest.append(z)
+#     predictions_111_latest.append(rx)
+#     predictions_111_latest.append(ry)
+#     predictions_111_latest.append(rz)
+#     predictions_111_latest.append(g)
+#
+#     import plotly.graph_objects as go
+#     import numpy as np
+#
+#     timesteps = np.arange(50)
+#     import matplotlib.pyplot as plt
+#
+#     gt_111 = []
+#     x = []
+#     y = []
+#     z = []
+#     rx = []
+#     ry = []
+#     rz = []
+#     g = []
+#     for i in range(0, 300, 6):
+#         x.append(data['action'][i][0][0])
+#         y.append(data['action'][i][0][1])
+#         z.append(data['action'][i][0][2])
+#         rx.append(data['action'][i][0][3])
+#         ry.append(data['action'][i][0][4])
+#         rz.append(data['action'][i][0][5])
+#         g.append(data['action'][i][0][6])
+#     gt_111.append(x)
+#     gt_111.append(y)
+#     gt_111.append(z)
+#     gt_111.append(rx)
+#     gt_111.append(ry)
+#     gt_111.append(rz)
+#     gt_111.append(g)
+#     fig_111_latest = go.Figure(data=[go.Scatter3d(
+#         x=predictions_111_latest[0], y=predictions_111_latest[1], z=predictions_111_latest[2],
+#         mode='lines+markers',
+#         marker=dict(
+#             size=10,
+#             color=timesteps,
+#             symbol="circle",
+#             colorscale='Viridis',  # 기본 색상 스케일 (Viridis)
+#             colorbar=dict(title='Timestep')  # 색상 바 제목
+#         ),
+#         line=dict(
+#             color=timesteps,  # 선 색상도 timestep에 따라 변함
+#             colorscale='Viridis',  # 동일한 색상 스케일
+#             width=4
+#         ),
+#     ), go.Scatter3d(
+#         x=gt_111[0], y=gt_111[1], z=gt_111[2],
+#         mode='lines+markers',
+#         marker=dict(
+#             size=10,
+#             color=timesteps,  # 색상 배열을 적용
+#             symbol="square",
+#             colorscale='Viridis',  # 기본 색상 스케일 (Viridis)
+#             colorbar=dict(title='Timestep')  # 색상 바 제목
+#         ),
+#         line=dict(
+#             color=timesteps,  # 선 색상도 timestep에 따라 변함
+#             colorscale='Viridis',  # 동일한 색상 스케일
+#             width=4
+#         ),
+#     )])
+#     fig_111_latest.show()
+#     fig_111_latest.write_html("Pick_the_white_cup_nearest_from_the_robot.html")
+#     # Pick_the_blue_cup_on_the_right
+#     # Pick_the_white_cup_nearest_from_the_robot
+#     # Pick_the_red_cup_behind_the_purple_one
+#     # Pick_the_yellow_cup
+#     for i in range(7):
+#         n = f'71{i + 1}'
+#         plt.subplot(int(n))
+#         plt.plot(predictions_111_latest[i], 'b--', gt_111[i], 'r')
+#     plt.savefig("Pick_the_white_cup_nearest_from_the_robot.png")
+#     plt.show()
+#
+#     with open("/sdb1/piper_subtask_data/eval/pick/Val_np/Pick the red cup behind the purple one./episode.pickle",
+#               "rb") as f:
+#         data = pickle.load(f)
+#
+#     traj_111_latest = []
+#     # for i in range(50):
+#     for i in range(0, 300, 6):
+#         image = Image.fromarray(data['observation.images.table'][i][0])
+#         prompt = "In: What should the robot do to pick the red cup behind the purple one?\nOut:"
+#         inputs = processor(prompt, image).to(device, dtype=torch.bfloat16)
+#         action = vla.predict_action(**inputs, unnorm_key="piper5_hz", do_sample=False)
+#         traj_111_latest.append(action)
+#     predictions_111_latest = []
+#     x = []
+#     y = []
+#     z = []
+#     rx = []
+#     ry = []
+#     rz = []
+#     g = []
+#     for i in range(50):
+#         x.append(traj_111_latest[i][0])
+#         y.append(traj_111_latest[i][1])
+#         z.append(traj_111_latest[i][2])
+#         rx.append(traj_111_latest[i][3])
+#         ry.append(traj_111_latest[i][4])
+#         rz.append(traj_111_latest[i][5])
+#         g.append(traj_111_latest[i][6])
+#     predictions_111_latest.append(x)
+#     predictions_111_latest.append(y)
+#     predictions_111_latest.append(z)
+#     predictions_111_latest.append(rx)
+#     predictions_111_latest.append(ry)
+#     predictions_111_latest.append(rz)
+#     predictions_111_latest.append(g)
+#
+#     import plotly.graph_objects as go
+#     import numpy as np
+#
+#     timesteps = np.arange(50)
+#     import matplotlib.pyplot as plt
+#
+#     gt_111 = []
+#     x = []
+#     y = []
+#     z = []
+#     rx = []
+#     ry = []
+#     rz = []
+#     g = []
+#     for i in range(0, 300, 6):
+#         x.append(data['action'][i][0][0])
+#         y.append(data['action'][i][0][1])
+#         z.append(data['action'][i][0][2])
+#         rx.append(data['action'][i][0][3])
+#         ry.append(data['action'][i][0][4])
+#         rz.append(data['action'][i][0][5])
+#         g.append(data['action'][i][0][6])
+#     gt_111.append(x)
+#     gt_111.append(y)
+#     gt_111.append(z)
+#     gt_111.append(rx)
+#     gt_111.append(ry)
+#     gt_111.append(rz)
+#     gt_111.append(g)
+#     fig_111_latest = go.Figure(data=[go.Scatter3d(
+#         x=predictions_111_latest[0], y=predictions_111_latest[1], z=predictions_111_latest[2],
+#         mode='lines+markers',
+#         marker=dict(
+#             size=10,
+#             color=timesteps,
+#             symbol="circle",
+#             colorscale='Viridis',  # 기본 색상 스케일 (Viridis)
+#             colorbar=dict(title='Timestep')  # 색상 바 제목
+#         ),
+#         line=dict(
+#             color=timesteps,  # 선 색상도 timestep에 따라 변함
+#             colorscale='Viridis',  # 동일한 색상 스케일
+#             width=4
+#         ),
+#     ), go.Scatter3d(
+#         x=gt_111[0], y=gt_111[1], z=gt_111[2],
+#         mode='lines+markers',
+#         marker=dict(
+#             size=10,
+#             color=timesteps,  # 색상 배열을 적용
+#             symbol="square",
+#             colorscale='Viridis',  # 기본 색상 스케일 (Viridis)
+#             colorbar=dict(title='Timestep')  # 색상 바 제목
+#         ),
+#         line=dict(
+#             color=timesteps,  # 선 색상도 timestep에 따라 변함
+#             colorscale='Viridis',  # 동일한 색상 스케일
+#             width=4
+#         ),
+#     )])
+#     fig_111_latest.show()
+#     fig_111_latest.write_html("Pick_the_red_cup_behind_the_purple_one.html")
+#     # Pick_the_blue_cup_on_the_right
+#     # Pick_the_white_cup_nearest_from_the_robot
+#     # Pick_the_red_cup_behind_the_purple_one
+#     # Pick_the_yellow_cup
+#     for i in range(7):
+#         n = f'71{i + 1}'
+#         plt.subplot(int(n))
+#         plt.plot(predictions_111_latest[i], 'b--', gt_111[i], 'r')
+#     plt.savefig("Pick_the_red_cup_behind_the_purple_one.png")
+#     plt.show()
+#
+#     with open("/sdb1/piper_subtask_data/eval/pick/Val_np/Pick the yellow cup./episode.pickle",
+#               "rb") as f:
+#         data = pickle.load(f)
+#
+#     traj_111_latest = []
+#     # for i in range(50):
+#     for i in range(0, 300, 6):
+#         image = Image.fromarray(data['observation.images.table'][i][0])
+#         prompt = "In: What should the robot do to pick the yellow cup?\nOut:"
+#         inputs = processor(prompt, image).to(device, dtype=torch.bfloat16)
+#         action = vla.predict_action(**inputs, unnorm_key="piper5_hz", do_sample=False)
+#         traj_111_latest.append(action)
+#     predictions_111_latest = []
+#     x = []
+#     y = []
+#     z = []
+#     rx = []
+#     ry = []
+#     rz = []
+#     g = []
+#     for i in range(50):
+#         x.append(traj_111_latest[i][0])
+#         y.append(traj_111_latest[i][1])
+#         z.append(traj_111_latest[i][2])
+#         rx.append(traj_111_latest[i][3])
+#         ry.append(traj_111_latest[i][4])
+#         rz.append(traj_111_latest[i][5])
+#         g.append(traj_111_latest[i][6])
+#     predictions_111_latest.append(x)
+#     predictions_111_latest.append(y)
+#     predictions_111_latest.append(z)
+#     predictions_111_latest.append(rx)
+#     predictions_111_latest.append(ry)
+#     predictions_111_latest.append(rz)
+#     predictions_111_latest.append(g)
+#
+#     import plotly.graph_objects as go
+#     import numpy as np
+#
+#     timesteps = np.arange(50)
+#     import matplotlib.pyplot as plt
+#
+#     gt_111 = []
+#     x = []
+#     y = []
+#     z = []
+#     rx = []
+#     ry = []
+#     rz = []
+#     g = []
+#     for i in range(0, 300, 6):
+#         x.append(data['action'][i][0][0])
+#         y.append(data['action'][i][0][1])
+#         z.append(data['action'][i][0][2])
+#         rx.append(data['action'][i][0][3])
+#         ry.append(data['action'][i][0][4])
+#         rz.append(data['action'][i][0][5])
+#         g.append(data['action'][i][0][6])
+#     gt_111.append(x)
+#     gt_111.append(y)
+#     gt_111.append(z)
+#     gt_111.append(rx)
+#     gt_111.append(ry)
+#     gt_111.append(rz)
+#     gt_111.append(g)
+#     fig_111_latest = go.Figure(data=[go.Scatter3d(
+#         x=predictions_111_latest[0], y=predictions_111_latest[1], z=predictions_111_latest[2],
+#         mode='lines+markers',
+#         marker=dict(
+#             size=10,
+#             color=timesteps,
+#             symbol="circle",
+#             colorscale='Viridis',  # 기본 색상 스케일 (Viridis)
+#             colorbar=dict(title='Timestep')  # 색상 바 제목
+#         ),
+#         line=dict(
+#             color=timesteps,  # 선 색상도 timestep에 따라 변함
+#             colorscale='Viridis',  # 동일한 색상 스케일
+#             width=4
+#         ),
+#     ), go.Scatter3d(
+#         x=gt_111[0], y=gt_111[1], z=gt_111[2],
+#         mode='lines+markers',
+#         marker=dict(
+#             size=10,
+#             color=timesteps,  # 색상 배열을 적용
+#             symbol="square",
+#             colorscale='Viridis',  # 기본 색상 스케일 (Viridis)
+#             colorbar=dict(title='Timestep')  # 색상 바 제목
+#         ),
+#         line=dict(
+#             color=timesteps,  # 선 색상도 timestep에 따라 변함
+#             colorscale='Viridis',  # 동일한 색상 스케일
+#             width=4
+#         ),
+#     )])
+#     fig_111_latest.show()
+#     fig_111_latest.write_html("Pick_the_yellow_cup.html")
+#     # Pick_the_blue_cup_on_the_right
+#     # Pick_the_white_cup_nearest_from_the_robot
+#     # Pick_the_red_cup_behind_the_purple_one
+#     # Pick_the_yellow_cup
+#     for i in range(7):
+#         n = f'71{i + 1}'
+#         plt.subplot(int(n))
+#         plt.plot(predictions_111_latest[i], 'b--', gt_111[i], 'r')
+#     plt.savefig("Pick_the_yellow_cup.png")
+#     plt.show()
+#
+#
