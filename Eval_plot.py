@@ -262,7 +262,7 @@ if __name__ == "__main__":
     #Pick the white cup nearest from the robot.
     #Pick the red cup behind the purple one.
     #Pick the yellow cup.
-    with open("/sdb1/piper_subtask_data/eval/pick/Val_np/Pick the blue cup on the right./episode.pickle", "rb") as f:
+    with open("/sdb1/piper_subtask_data/eval/pick/Val_np/Pick the yellow cup./episode.pickle", "rb") as f:
         data = pickle.load(f)
 
 
@@ -297,6 +297,16 @@ if __name__ == "__main__":
     predictions_111_latest.append(ry)
     predictions_111_latest.append(rz)
     predictions_111_latest.append(g)
+
+
+
+    # 7개의 리스트를 50개의 (7,) 벡터로 전치
+    trajectory_array = np.stack(predictions_111_latest, axis=1)  # shape: (50, 7)
+
+    # 저장
+    np.save("predictions_111_latest.npy", trajectory_array)
+    exit()
+
 
     import plotly.graph_objects as go
     import numpy as np
