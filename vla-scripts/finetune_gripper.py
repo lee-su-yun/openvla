@@ -166,7 +166,7 @@ def finetune(cfg: FinetuneConfig) -> None:
     assert torch.cuda.is_available(), "Fine-tuning assumes at least one GPU is available!"
     # distributed_state = PartialState()
     # torch.cuda.set_device(device_id := distributed_state.local_process_index)
-    device = torch.device("cuda:1")
+    device = torch.device("cuda:3")
     torch.cuda.set_device(device)
     torch.cuda.empty_cache()
 
@@ -234,7 +234,7 @@ def finetune(cfg: FinetuneConfig) -> None:
         vla.print_trainable_parameters()
 
     # Wrap VLA in PyTorch DDP Wrapper for Multi-GPU Training
-    vla = DDP(vla, device_ids=[1], find_unused_parameters=True, gradient_as_bucket_view=True)
+    vla = DDP(vla, device_ids=[3], find_unused_parameters=True, gradient_as_bucket_view=True)
     #vla = DDP(vla, device_ids=[device_id], find_unused_parameters=True, gradient_as_bucket_view=True)
     # Move model to device (no DDP)
     # Save vla.module access to a variable for DDP compatibility

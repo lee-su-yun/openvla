@@ -41,6 +41,11 @@ class RLDSBatchTransform:
         img = Image.fromarray(rlds_batch["observation"]["image_primary"][0])
         lang = rlds_batch["task"]["language_instruction"].decode().lower()
 
+        if "task" in rlds_batch:
+            print("task key exists:", rlds_batch["task"].keys())
+        else:
+            print("No task key!")
+
         # Construct Chat-based Prompt =>> Input is default query + language instruction, output are the action tokens
         prompt_builder = self.prompt_builder_fn("openvla")
         conversation = [
