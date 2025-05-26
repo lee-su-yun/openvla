@@ -40,7 +40,7 @@ class RLDSBatchTransform:
         dataset_name, action = rlds_batch["dataset_name"], rlds_batch["action"][0]
         img = Image.fromarray(rlds_batch["observation"]["image_primary"][0])
         lang = rlds_batch["task"]["language_instruction"].decode().lower()
-
+        print(rlds_batch["task"]["language_instruction"])
         if "task" in rlds_batch:
             print("task key exists:", rlds_batch["task"].keys())
         else:
