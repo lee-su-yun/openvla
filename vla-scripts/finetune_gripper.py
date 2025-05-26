@@ -50,6 +50,9 @@ from prismatic.extern.hf.configuration_prismatic import OpenVLAConfig
 from prismatic.extern.hf.modeling_prismatic import OpenVLAForActionPrediction
 from prismatic.extern.hf.processing_prismatic import PrismaticImageProcessor, PrismaticProcessor
 
+import matplotlib.pyplot as plt
+import torchvision.transforms as T
+
 # Sane Defaults
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
@@ -346,6 +349,24 @@ def finetune(cfg: FinetuneConfig) -> None:
         optimizer.zero_grad()
 
         for batch_idx, batch in enumerate(dataloader):
+            if batch_idx == 0:
+                # pixel_values: (B, 3, H, W) → convert to (H, W, 3)
+                pixel = batch["pixel_values"][0].cpu()
+                inv_transform = T.Normalize(
+                    mean=[-m / s for m, s in
+                          zip(processor.image_processor.image_mean, processor.image_processor.image_std)],
+                    std=[1 / s for s in processor.image_processor.image_std]
+                )
+                unnorm_img = inv_transform(pixel).clamp(0, 1)  # Unnormalize and clip
+                img = unnorm_img.permute(1, 2, 0).numpy()
+
+                plt.imshow(img)
+                plt.title("First Batch Image")
+                plt.axis("off")
+                plt.savefig("batch_example.png")
+                plt.show()
+
+
             with torch.autocast("cuda", dtype=torch.bfloat16):
                 output: CausalLMOutputWithPast = vla(
                     input_ids=batch["input_ids"].to(device),
