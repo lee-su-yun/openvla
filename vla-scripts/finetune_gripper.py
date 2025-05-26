@@ -365,7 +365,7 @@ def finetune(cfg: FinetuneConfig) -> None:
                 plt.axis("off")
                 plt.savefig("batch_example.png")
                 plt.show()
-
+            exit()
 
             with torch.autocast("cuda", dtype=torch.bfloat16):
                 output: CausalLMOutputWithPast = vla(
