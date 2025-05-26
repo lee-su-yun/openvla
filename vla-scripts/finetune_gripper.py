@@ -50,9 +50,6 @@ from prismatic.extern.hf.configuration_prismatic import OpenVLAConfig
 from prismatic.extern.hf.modeling_prismatic import OpenVLAForActionPrediction
 from prismatic.extern.hf.processing_prismatic import PrismaticImageProcessor, PrismaticProcessor
 
-import matplotlib.pyplot as plt
-import torchvision.transforms as T
-
 # Sane Defaults
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
@@ -103,7 +100,7 @@ class FinetuneConfig:
     use_lora: bool = True                                           # Whether to use LoRA fine-tuning
     lora_rank: int = 32                                             # Rank of LoRA weight matrix
     lora_dropout: float = 0.0                                       # Dropout applied to LoRA weights
-    use_quantization: bool = False                                  # Whether to 4-bit quantize VLA for LoRA fine-tuning
+    use_quantization: bool = True                                   # Whether to 4-bit quantize VLA for LoRA fine-tuning
                                                                     #   => CAUTION: Reduces memory but hurts performance
 
     # Tracking Parameters
@@ -179,7 +176,7 @@ def finetune(cfg: FinetuneConfig) -> None:
         f"+b{cfg.batch_size * cfg.grad_accumulation_steps}"
         f"+lr-{cfg.learning_rate}"
     )
-    exp_id += "+val"
+    exp_id += "+top"
     if cfg.use_lora:
         exp_id += f"+lora-r{cfg.lora_rank}+dropout-{cfg.lora_dropout}"
     if cfg.use_quantization:
@@ -187,7 +184,7 @@ def finetune(cfg: FinetuneConfig) -> None:
     if cfg.run_id_note is not None:
         exp_id += f"--{cfg.run_id_note}"
     if cfg.image_aug:
-        exp_id += "--image_aug+norm+bin"
+        exp_id += "--image_aug+norm"
 
     # Start =>> Build Directories
     run_dir, adapter_dir = cfg.run_root_dir / exp_id, cfg.adapter_tmp_dir / exp_id
@@ -238,6 +235,9 @@ def finetune(cfg: FinetuneConfig) -> None:
 
     # Wrap VLA in PyTorch DDP Wrapper for Multi-GPU Training
     vla = DDP(vla, device_ids=[3], find_unused_parameters=True, gradient_as_bucket_view=True)
+
+    #vla = DDP(vla, device_ids=[device_id], find_unused_parameters=True, gradient_as_bucket_view=True)
+    vla.module.gradient_checkpointing_enable(gradient_checkpointing_kwargs={"use_reentrant": False})
     #vla = DDP(vla, device_ids=[device_id], find_unused_parameters=True, gradient_as_bucket_view=True)
     # Move model to device (no DDP)
     # Save vla.module access to a variable for DDP compatibility
@@ -272,12 +272,12 @@ def finetune(cfg: FinetuneConfig) -> None:
         image_transform=processor.image_processor.apply_transform,
         prompt_builder_fn=PurePromptBuilder if "v01" not in cfg.vla_path else VicunaV15ChatPromptBuilder,
     )
-    val_batch_transform = RLDSBatchTransform(
-        action_tokenizer,
-        processor.tokenizer,
-        image_transform=processor.image_processor.apply_transform,
-        prompt_builder_fn=PurePromptBuilder if "v01" not in cfg.vla_path else VicunaV15ChatPromptBuilder,
-    )
+    # val_batch_transform = RLDSBatchTransform(
+    #     action_tokenizer,
+    #     processor.tokenizer,
+    #     image_transform=processor.image_processor.apply_transform,
+    #     prompt_builder_fn=PurePromptBuilder if "v01" not in cfg.vla_path else VicunaV15ChatPromptBuilder,
+    # )
 
     vla_dataset = RLDSDataset(
         cfg.data_root_dir,
@@ -306,21 +306,21 @@ def finetune(cfg: FinetuneConfig) -> None:
     )
     ############
     # Load validation dataset (assume 'val' subdirectory exists in dataset)
-    val_dataset = RLDSDataset(
-        cfg.data_root_dir,
-        "piper5_hz_val",  # or dataset_name + "_val" if you store separately
-        val_batch_transform,
-        resize_resolution=tuple(model.config.image_sizes),
-        shuffle_buffer_size=1,  # no shuffle needed
-        image_aug=False  # important: no augmentation for validation!
-    )
-    val_dataloader = DataLoader(
-        val_dataset,
-        batch_size=cfg.batch_size,
-        sampler=None,
-        collate_fn=collator,
-        num_workers=0
-    )
+    # val_dataset = RLDSDataset(
+    #     cfg.data_root_dir,
+    #     "piper5_hz_val",  # or dataset_name + "_val" if you store separately
+    #     val_batch_transform,
+    #     resize_resolution=tuple(model.config.image_sizes),
+    #     shuffle_buffer_size=1,  # no shuffle needed
+    #     image_aug=False  # important: no augmentation for validation!
+    # )
+    # val_dataloader = DataLoader(
+    #     val_dataset,
+    #     batch_size=cfg.batch_size,
+    #     sampler=None,
+    #     collate_fn=collator,
+    #     num_workers=0
+    # )
     # print(f"len(dataloader): {len(dataloader)}")
     # print(f"type(dataloader): {type(dataloader)}")
     # print(f"type(dataloader.dataset): {type(dataloader.dataset)}")
@@ -334,8 +334,8 @@ def finetune(cfg: FinetuneConfig) -> None:
     val_every_n_steps = 100*cfg.grad_accumulation_steps
     # Initialize Logging =>> W&B
     #if distributed_state.is_main_process:
-    # if True:
-    #     wandb.init(entity=cfg.wandb_entity, project=cfg.wandb_project, name=f"ft+{exp_id}")
+    if True:
+        wandb.init(entity=cfg.wandb_entity, project=cfg.wandb_project, name=f"ft+{exp_id}")
 
     # Deque to store recent train metrics (used for computing smoothened metrics for gradient accumulation)
     recent_losses = deque(maxlen=cfg.grad_accumulation_steps)
@@ -370,10 +370,6 @@ def finetune(cfg: FinetuneConfig) -> None:
             action_gt = batch["labels"][:, 1:].to(action_preds.device)
             mask = action_gt > action_tokenizer.action_token_begin_idx
 
-            print(action_logits[0][-2][31744:32000])
-            # print(action_tokenizer.action_token_begin_idx)
-
-
             # Compute Accuracy
             correct_preds = (action_preds == action_gt) & mask
             action_accuracy = correct_preds.sum().float() / mask.sum().float()
@@ -387,8 +383,6 @@ def finetune(cfg: FinetuneConfig) -> None:
             )
             action_l1_loss = torch.nn.functional.l1_loss(continuous_actions_pred, continuous_actions_gt)
 
-            print(continuous_actions_pred)
-            exit()
             # Store recent train metrics
             recent_losses.append(loss.item())
             recent_action_accuracies.append(action_accuracy.item())
@@ -477,17 +471,17 @@ def finetune(cfg: FinetuneConfig) -> None:
             # if distributed_state.is_main_process and gradient_step_idx % val_every_n_steps == 0:
             #     val_loss, val_acc, val_l1 = evaluate(vla, val_dataloader, device_id, action_tokenizer)
 
-            if (batch_idx + 1) % val_every_n_steps == 0:
-                val_loss, val_acc, val_l1 = evaluate(vla, val_dataloader, device, action_tokenizer)
-                wandb.log(
-                    {
-                        "val_loss": val_loss,
-                        "val_action_accuracy": val_acc,
-                        "val_l1_loss": val_l1
-                    },
-                    step=gradient_step_idx,
-                )
-                print(f"Validation step {gradient_step_idx} | loss: {val_loss:.4f}, acc: {val_acc:.4f}, l1: {val_l1:.4f}")
+            # if (batch_idx + 1) % val_every_n_steps == 0:
+            #     val_loss, val_acc, val_l1 = evaluate(vla, val_dataloader, device, action_tokenizer)
+            #     wandb.log(
+            #         {
+            #             "val_loss": val_loss,
+            #             "val_action_accuracy": val_acc,
+            #             "val_l1_loss": val_l1
+            #         },
+            #         step=gradient_step_idx,
+            #     )
+            #     print(f"Validation step {gradient_step_idx} | loss: {val_loss:.4f}, acc: {val_acc:.4f}, l1: {val_l1:.4f}")
 
             # Stop training when max_steps is reached
             if gradient_step_idx == cfg.max_steps:
