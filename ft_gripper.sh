@@ -1,6 +1,6 @@
 
   torchrun \
-  --standalone --nnodes 1 --nproc-per-node 1 vla-scripts/finetune_with_val.py \
+  --standalone --nnodes 1 --nproc-per-node 1 vla-scripts/finetune_gripper.py \
   --vla_path "/sda1/openvla-7b" \
   --data_root_dir "/home/sylee/tensorflow_datasets" \
   --dataset_name "piper5_hz_subtask" \
