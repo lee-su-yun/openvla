@@ -60,7 +60,7 @@ if __name__ == "__main__":
 
     # Load Processor & VLA
     #model_path = "/sdc1/piper_subtask/openvla/openvla-7b+piper5_hz_subtask+b16+lr-0.0005+lora-r32+dropout-0.0--image_aug"
-    model_path = "/sdc1/piper_subtask/openvla/Norm/openvla-7b+piper5_hz_subtask+b16+lr-0.0005+val+lora-r32+dropout-0.0--image_aug+norm/step_2000"
+    model_path = "/sdc1/piper_subtask/openvla/Top_Norm/openvla-7b+piper5_hz_subtask+b16+lr-0.0005+val+qlora-r32+dropout-0.0+q-4bit--image_aug+norm/step_1000"
     processor = AutoProcessor.from_pretrained(model_path, trust_remote_code=True)
     vla = AutoModelForVision2Seq.from_pretrained(
         #"/sdb1/ckpt/openvla_5hz_n/openvla-7b+piper5_hz+b16+lr-0.0005+lora-r32+dropout-0.0/latest",
@@ -104,129 +104,129 @@ if __name__ == "__main__":
 
     vla.norm_stats["piper5_hz"] = {
         "action": {
-          "mean": [
-            155008.453125,
-            10229.4921875,
-            330142.46875,
-            31946.19140625,
-            51902.80859375,
-            -11467.6015625,
-            19763.119140625
-          ],
-          "std": [
-            113648.5546875,
-            50988.80078125,
-            101760.9921875,
-            163935.375,
-            21492.873046875,
-            160660.078125,
-            24381.95703125
-          ],
-          "max": [
-            440180.0,
-            231048.0,
-            527437.0,
-            180000.0,
-            90000.0,
-            179999.0,
-            76076.0
-          ],
-          "min": [
-            -56222.0,
-            -154621.0,
-            164685.0,
-            -179992.0,
-            4915.0,
-            -179995.0,
-            -1674.0
-          ],
-          "q01": [
-            -26293.22,
-            -127458.24,
-            166510.0,
-            -179821.02,
-            14869.9,
-            -179428.0,
-            -1528.0
-          ],
-          "q99": [
-            420192.36000000004,
-            150692.44000000006,
-            495632.79000000004,
-            179749.08000000002,
-            85464.17,
-            179322.16,
-            73382.73000000001
-          ],
-          "mask": [
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True
-          ]
-        },
-        "proprio": {
-          "mean": [
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0.0
-          ],
-          "std": [
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0.0
-          ],
-          "max": [
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0.0
-          ],
-          "min": [
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0.0
-          ],
-          "q01": [
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0.0
-          ],
-          "q99": [
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0.0
-          ]
-        },
-    "num_transitions": 10000,
+      "mean": [
+        166300.484375,
+        11240.7763671875,
+        348090.59375,
+        31871.673828125,
+        49085.80859375,
+        -15648.5546875,
+        22036.552734375
+      ],
+      "std": [
+        114340.0234375,
+        53640.58203125,
+        91002.1015625,
+        164524.6875,
+        20819.51953125,
+        160293.09375,
+        24605.005859375
+      ],
+      "max": [
+        440180.0,
+        231048.0,
+        527437.0,
+        180000.0,
+        90000.0,
+        179999.0,
+        76076.0
+      ],
+      "min": [
+        -56222.0,
+        -154621.0,
+        164685.0,
+        -179992.0,
+        4915.0,
+        -179995.0,
+        -1674.0
+      ],
+      "q01": [
+        -27396.65,
+        -130284.49,
+        167111.61,
+        -179833.01,
+        14653.8,
+        -179428.09,
+        -1528.0
+      ],
+      "q99": [
+        421863.1500000001,
+        157140.5600000001,
+        496357.83,
+        179778.03,
+        85821.07,
+        179394.05,
+        73964.0
+      ],
+      "mask": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    "proprio": {
+      "mean": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "std": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "max": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "min": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "q01": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "q99": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "num_transitions": 9000,
     "num_trajectories": 200
-    }
+  }
    # Align the cups
    #  vla.norm_stats["piper5_hz"] = {
    #      "action": {
@@ -268,7 +268,7 @@ if __name__ == "__main__":
 
     traj_111_latest = []
     #for i in range(50):
-    for i in range(0, 300, 6):
+    for i in range(30, 300, 6):
         image = Image.fromarray(data['observation.images.table'][i][0])
         prompt = "In: What should the robot do to pick the yellow cup?\nOut:"
         inputs = processor(prompt, image).to(device, dtype=torch.bfloat16)
@@ -282,7 +282,7 @@ if __name__ == "__main__":
     ry = []
     rz = []
     g = []
-    for i in range(50):
+    for i in range(45):
         x.append(traj_111_latest[i][0])
         y.append(traj_111_latest[i][1])
         z.append(traj_111_latest[i][2])
@@ -305,7 +305,7 @@ if __name__ == "__main__":
 
     import plotly.graph_objects as go
     import numpy as np
-    timesteps = np.arange(50)
+    timesteps = np.arange(45)
     import matplotlib.pyplot as plt
     gt_111 = []
     x = []
@@ -315,7 +315,7 @@ if __name__ == "__main__":
     ry = []
     rz = []
     g = []
-    for i in range(0, 300, 6):
+    for i in range(30, 300, 6):
         x.append(data['action'][i][0][0])
         y.append(data['action'][i][0][1])
         z.append(data['action'][i][0][2])
@@ -334,8 +334,8 @@ if __name__ == "__main__":
     trajectory_array = np.stack(gt_111, axis=1)  # shape: (50, 7)
 
     # 저장
-    np.save("gt_111_latest.npy", trajectory_array)
-    exit()
+    # np.save("gt_111_latest.npy", trajectory_array)
+    # exit()
     fig_111_latest = go.Figure(data=[go.Scatter3d(
         x=predictions_111_latest[0], y=predictions_111_latest[1], z=predictions_111_latest[2],
         mode='lines+markers',
@@ -368,7 +368,7 @@ if __name__ == "__main__":
         ),
     )])
     fig_111_latest.show()
-    fig_111_latest.write_html("Pick_the_blue_cup_on_the_right.html")
+    fig_111_latest.write_html("Pick_the_yellow_cup.html")
     #Pick_the_blue_cup_on_the_right
     #Pick_the_white_cup_nearest_from_the_robot
     #Pick_the_red_cup_behind_the_purple_one
@@ -377,7 +377,7 @@ if __name__ == "__main__":
         n = f'71{i + 1}'
         plt.subplot(int(n))
         plt.plot(predictions_111_latest[i], 'b--', gt_111[i], 'r')
-    plt.savefig("Pick_the_blue_cup_on_the_right.png")
+    plt.savefig("Pick_the_yellow_cup.png")
     plt.show()
 
 # #######################################################################################
