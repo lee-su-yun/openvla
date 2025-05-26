@@ -100,7 +100,7 @@ class FinetuneConfig:
     use_lora: bool = True                                           # Whether to use LoRA fine-tuning
     lora_rank: int = 32                                             # Rank of LoRA weight matrix
     lora_dropout: float = 0.0                                       # Dropout applied to LoRA weights
-    use_quantization: bool = True                                   # Whether to 4-bit quantize VLA for LoRA fine-tuning
+    use_quantization: bool = False                                  # Whether to 4-bit quantize VLA for LoRA fine-tuning
                                                                     #   => CAUTION: Reduces memory but hurts performance
 
     # Tracking Parameters
@@ -237,7 +237,7 @@ def finetune(cfg: FinetuneConfig) -> None:
     vla = DDP(vla, device_ids=[3], find_unused_parameters=True, gradient_as_bucket_view=True)
 
     #vla = DDP(vla, device_ids=[device_id], find_unused_parameters=True, gradient_as_bucket_view=True)
-    vla.module.gradient_checkpointing_enable(gradient_checkpointing_kwargs={"use_reentrant": False})
+ #   vla.module.gradient_checkpointing_enable(gradient_checkpointing_kwargs={"use_reentrant": False})
     #vla = DDP(vla, device_ids=[device_id], find_unused_parameters=True, gradient_as_bucket_view=True)
     # Move model to device (no DDP)
     # Save vla.module access to a variable for DDP compatibility
