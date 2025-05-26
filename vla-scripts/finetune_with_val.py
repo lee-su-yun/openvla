@@ -306,21 +306,21 @@ def finetune(cfg: FinetuneConfig) -> None:
     )
     ############
     # Load validation dataset (assume 'val' subdirectory exists in dataset)
-    val_dataset = RLDSDataset(
-        cfg.data_root_dir,
-        "piper5_hz_val",  # or dataset_name + "_val" if you store separately
-        val_batch_transform,
-        resize_resolution=tuple(model.config.image_sizes),
-        shuffle_buffer_size=1,  # no shuffle needed
-        image_aug=False  # important: no augmentation for validation!
-    )
-    val_dataloader = DataLoader(
-        val_dataset,
-        batch_size=cfg.batch_size,
-        sampler=None,
-        collate_fn=collator,
-        num_workers=0
-    )
+    # val_dataset = RLDSDataset(
+    #     cfg.data_root_dir,
+    #     "piper5_hz_val",  # or dataset_name + "_val" if you store separately
+    #     val_batch_transform,
+    #     resize_resolution=tuple(model.config.image_sizes),
+    #     shuffle_buffer_size=1,  # no shuffle needed
+    #     image_aug=False  # important: no augmentation for validation!
+    # )
+    # val_dataloader = DataLoader(
+    #     val_dataset,
+    #     batch_size=cfg.batch_size,
+    #     sampler=None,
+    #     collate_fn=collator,
+    #     num_workers=0
+    # )
     # print(f"len(dataloader): {len(dataloader)}")
     # print(f"type(dataloader): {type(dataloader)}")
     # print(f"type(dataloader.dataset): {type(dataloader.dataset)}")
