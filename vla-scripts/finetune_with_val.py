@@ -100,7 +100,7 @@ class FinetuneConfig:
     use_lora: bool = True                                           # Whether to use LoRA fine-tuning
     lora_rank: int = 32                                             # Rank of LoRA weight matrix
     lora_dropout: float = 0.0                                       # Dropout applied to LoRA weights
-    use_quantization: bool = False                                  # Whether to 4-bit quantize VLA for LoRA fine-tuning
+    use_quantization: bool = True                                   # Whether to 4-bit quantize VLA for LoRA fine-tuning
                                                                     #   => CAUTION: Reduces memory but hurts performance
 
     # Tracking Parameters
@@ -166,7 +166,7 @@ def finetune(cfg: FinetuneConfig) -> None:
     assert torch.cuda.is_available(), "Fine-tuning assumes at least one GPU is available!"
     # distributed_state = PartialState()
     # torch.cuda.set_device(device_id := distributed_state.local_process_index)
-    device = torch.device("cuda:0")
+    device = torch.device("cuda:1")
     torch.cuda.set_device(device)
     torch.cuda.empty_cache()
 
@@ -178,7 +178,7 @@ def finetune(cfg: FinetuneConfig) -> None:
     )
     exp_id += "+val"
     if cfg.use_lora:
-        exp_id += f"+lora-r{cfg.lora_rank}+dropout-{cfg.lora_dropout}"
+        exp_id += f"+qlora-r{cfg.lora_rank}+dropout-{cfg.lora_dropout}"
     if cfg.use_quantization:
         exp_id += "+q-4bit"
     if cfg.run_id_note is not None:
@@ -234,7 +234,10 @@ def finetune(cfg: FinetuneConfig) -> None:
         vla.print_trainable_parameters()
 
     # Wrap VLA in PyTorch DDP Wrapper for Multi-GPU Training
-    vla = DDP(vla, device_ids=[0], find_unused_parameters=True, gradient_as_bucket_view=True)
+    vla = DDP(vla, device_ids=[1], find_unused_parameters=True, gradient_as_bucket_view=True)
+
+    #vla = DDP(vla, device_ids=[device_id], find_unused_parameters=True, gradient_as_bucket_view=True)
+    vla.module.gradient_checkpointing_enable(gradient_checkpointing_kwargs={"use_reentrant": False})
     #vla = DDP(vla, device_ids=[device_id], find_unused_parameters=True, gradient_as_bucket_view=True)
     # Move model to device (no DDP)
     # Save vla.module access to a variable for DDP compatibility
@@ -468,17 +471,17 @@ def finetune(cfg: FinetuneConfig) -> None:
             # if distributed_state.is_main_process and gradient_step_idx % val_every_n_steps == 0:
             #     val_loss, val_acc, val_l1 = evaluate(vla, val_dataloader, device_id, action_tokenizer)
 
-            if (batch_idx + 1) % val_every_n_steps == 0:
-                val_loss, val_acc, val_l1 = evaluate(vla, val_dataloader, device, action_tokenizer)
-                wandb.log(
-                    {
-                        "val_loss": val_loss,
-                        "val_action_accuracy": val_acc,
-                        "val_l1_loss": val_l1
-                    },
-                    step=gradient_step_idx,
-                )
-                print(f"Validation step {gradient_step_idx} | loss: {val_loss:.4f}, acc: {val_acc:.4f}, l1: {val_l1:.4f}")
+            # if (batch_idx + 1) % val_every_n_steps == 0:
+            #     val_loss, val_acc, val_l1 = evaluate(vla, val_dataloader, device, action_tokenizer)
+            #     wandb.log(
+            #         {
+            #             "val_loss": val_loss,
+            #             "val_action_accuracy": val_acc,
+            #             "val_l1_loss": val_l1
+            #         },
+            #         step=gradient_step_idx,
+            #     )
+            #     print(f"Validation step {gradient_step_idx} | loss: {val_loss:.4f}, acc: {val_acc:.4f}, l1: {val_l1:.4f}")
 
             # Stop training when max_steps is reached
             if gradient_step_idx == cfg.max_steps:
