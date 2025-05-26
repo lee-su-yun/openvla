@@ -272,12 +272,12 @@ def finetune(cfg: FinetuneConfig) -> None:
         image_transform=processor.image_processor.apply_transform,
         prompt_builder_fn=PurePromptBuilder if "v01" not in cfg.vla_path else VicunaV15ChatPromptBuilder,
     )
-    val_batch_transform = RLDSBatchTransform(
-        action_tokenizer,
-        processor.tokenizer,
-        image_transform=processor.image_processor.apply_transform,
-        prompt_builder_fn=PurePromptBuilder if "v01" not in cfg.vla_path else VicunaV15ChatPromptBuilder,
-    )
+    # val_batch_transform = RLDSBatchTransform(
+    #     action_tokenizer,
+    #     processor.tokenizer,
+    #     image_transform=processor.image_processor.apply_transform,
+    #     prompt_builder_fn=PurePromptBuilder if "v01" not in cfg.vla_path else VicunaV15ChatPromptBuilder,
+    # )
 
     vla_dataset = RLDSDataset(
         cfg.data_root_dir,
