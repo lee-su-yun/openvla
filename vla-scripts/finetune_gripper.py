@@ -167,6 +167,7 @@ def finetune(cfg: FinetuneConfig) -> None:
     # distributed_state = PartialState()
     # torch.cuda.set_device(device_id := distributed_state.local_process_index)
     device = torch.device("cuda:3")
+    print(device)
     torch.cuda.set_device(device)
     torch.cuda.empty_cache()
 
