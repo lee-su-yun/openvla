@@ -92,7 +92,7 @@ if __name__ == "__main__":
     traj_111_latest = []
     #for i in range(50):
     for i in range(30, 300, 6):
-        image = Image.fromarray(data['observation.images.table'][i][0])
+        image = Image.fromarray(data['observation.images.exo'][i][0])
         prompt = "In: What should the robot do to pick the yellow cup?\nOut:"
         inputs = processor(prompt, image).to(device, dtype=torch.bfloat16)
         action = vla.predict_action(**inputs, unnorm_key="piper5_hz", do_sample=False)
