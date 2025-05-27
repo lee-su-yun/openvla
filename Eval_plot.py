@@ -57,10 +57,7 @@ if __name__ == "__main__":
    #
    #     print(f"Saved: {target_path}")
    #  exit()
-    with open("/sdb1/piper_subtask_data/eval/pick/Val_np/Pick the yellow cup./episode.pickle", "rb") as f:
-        data = pickle.load(f)
-    print('good')
-    exit()
+
     # Load Processor & VLA
     #model_path = "/sdc1/piper_subtask/openvla/Norm/openvla-7b+piper5_hz_subtask+b16+lr-0.0005+val+lora-r32+dropout-0.0--image_aug+norm/step_10000"
     model_path = "/sdc1/piper_subtask/openvla/Top_Norm_lora/openvla-7b+piper5_hz_subtask+b16+lr-0.0005+top+lora-r32+dropout-0.0--image_aug+norm/step_9000"
