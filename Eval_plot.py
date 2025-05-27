@@ -38,7 +38,7 @@ if __name__ == "__main__":
    #
    # # 폴더 없으면 생성
    #  os.makedirs(target_base, exist_ok=True)
-   #
+
    # # 1~10 에피소드 반복
    #  for i in range(1, 11):
    #     source_path = os.path.join(source_base, str(i), "episode.pickle")
@@ -74,7 +74,7 @@ if __name__ == "__main__":
         trust_remote_code=True
     ).to(device)
 
-
+    vla.predic
     ###########
    # Pick
 
@@ -95,7 +95,7 @@ if __name__ == "__main__":
         image = Image.fromarray(data['observation.images.exo'][i][0])
         prompt = "In: What should the robot do to pick the yellow cup?\nOut:"
         inputs = processor(prompt, image).to(device, dtype=torch.bfloat16)
-        action = vla.predict_action(**inputs, unnorm_key="piper5_hz", do_sample=False)
+        action = vla.predict_action(**inputs, unnorm_key="piper5_hz_subtask", do_sample=False)
         traj_111_latest.append(action)
     predictions_111_latest = []
     x = []
