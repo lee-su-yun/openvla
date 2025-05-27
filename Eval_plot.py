@@ -154,11 +154,11 @@ if __name__ == "__main__":
     gt_111.append(g)
 # 7개의 리스트를 50개의 (7,) 벡터로 전치
     trajectory_array = np.stack(gt_111, axis=1)  # shape: (50, 7)
-    print(predictions_111_latest.shape)
-    exit()
+    pre_trajectory_array = np.stack(predictions_111_latest, axis=1)
+
     # 저장
     np.save("gt.npy", trajectory_array)
-    np.save("predict.npy", trajectory_array)
+    np.save("predict.npy", pre_trajectory_array)
     exit()
     fig_111_latest = go.Figure(data=[go.Scatter3d(
         x=predictions_111_latest[0], y=predictions_111_latest[1], z=predictions_111_latest[2],
