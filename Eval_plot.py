@@ -74,7 +74,6 @@ if __name__ == "__main__":
         trust_remote_code=True
     ).to(device)
 
-    vla.predic
     ###########
    # Pick
 
