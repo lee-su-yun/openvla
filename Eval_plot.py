@@ -93,14 +93,14 @@ if __name__ == "__main__":
     for i in range(30, 300, 6):
         image = Image.fromarray(data['observation.images.exo'][i][0])
 
-
-        np_img = np.array(image)
-        np_img_bgr = np_img[..., ::-1]
-        image_bgr = Image.fromarray(np_img_bgr)
+        #
+        # np_img = np.array(image)
+        # np_img_bgr = np_img[..., ::-1]
+        # image_bgr = Image.fromarray(np_img_bgr)
 
 
         prompt = "In: What should the robot do to pick the yellow cup?\nOut:"
-        inputs = processor(prompt, image_bgr).to(device, dtype=torch.bfloat16)
+        inputs = processor(prompt, image).to(device, dtype=torch.bfloat16)
         action = vla.predict_action(**inputs, unnorm_key="piper5_hz_subtask", do_sample=False)
         traj_111_latest.append(action)
     predictions_111_latest = []
