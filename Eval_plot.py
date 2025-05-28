@@ -71,8 +71,8 @@ if __name__ == "__main__":
         #attn_implementation="flash_attention_2", # [Optional] Requires `flash_attn`
         torch_dtype=dtype,
         #low_cpu_mem_usage=True,
-        #low_cpu_mem_usage=True,
-        #quantization_config=BitsAndBytesConfig(load_in_4bit=True, bnb_4bit_quant_type="nf4", bnb_4bit_use_double_quant=True, bnb_4bit_compute_dtype=dtype),
+        low_cpu_mem_usage=True,
+        quantization_config=BitsAndBytesConfig(load_in_4bit=True, bnb_4bit_quant_type="nf4", bnb_4bit_use_double_quant=True, bnb_4bit_compute_dtype=dtype),
         trust_remote_code=True
     ).to(device)
 
