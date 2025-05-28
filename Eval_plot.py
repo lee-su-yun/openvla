@@ -113,7 +113,7 @@ if __name__ == "__main__":
     ry = []
     rz = []
     g = []
-    for i in range(45):
+    for i in range(50):
         x.append(traj_111_latest[i][0])
         y.append(traj_111_latest[i][1])
         z.append(traj_111_latest[i][2])
@@ -136,7 +136,7 @@ if __name__ == "__main__":
 
     import plotly.graph_objects as go
     import numpy as np
-    timesteps = np.arange(45)
+    timesteps = np.arange(50)
     import matplotlib.pyplot as plt
     gt_111 = []
     x = []
@@ -146,7 +146,7 @@ if __name__ == "__main__":
     ry = []
     rz = []
     g = []
-    for i in range(30, 300, 6):
+    for i in range(0, 300, 6):
         x.append(data['action'][i][0][0])
         y.append(data['action'][i][0][1])
         z.append(data['action'][i][0][2])
@@ -200,7 +200,7 @@ if __name__ == "__main__":
         ),
     )])
     fig_111_latest.show()
-    fig_111_latest.write_html("Pick_the_yellow_cup.html")
+    fig_111_latest.write_html("Train.html")
     #Pick_the_blue_cup_on_the_right
     #Pick_the_white_cup_nearest_from_the_robot
     #Pick_the_red_cup_behind_the_purple_one
@@ -209,7 +209,7 @@ if __name__ == "__main__":
         n = f'71{i + 1}'
         plt.subplot(int(n))
         plt.plot(predictions_111_latest[i], 'b--', gt_111[i], 'r')
-    plt.savefig("Pick_the_yellow_cup.png")
+    plt.savefig("Train.png")
     plt.show()
 
 # #######################################################################################
