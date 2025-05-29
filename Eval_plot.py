@@ -59,7 +59,7 @@ if __name__ == "__main__":
    #     print(f"Saved: {target_path}")
    #  exit()
    #  with open("/sdb1/piper_subtask_data/train/pick/train_np/Pick the blue cup in the center./episode1.pickle", "rb") as f:
-    with open("/sdb1/piper_subtask_data/train/pick/Pick the blue cup in the center./1/episode1.pickle", "rb") as f:
+    with open("/sdb1/piper_subtask_data/train/pick/Pick the blue cup in the center./1/episode.pickle", "rb") as f:
         data = pickle.load(f)
     image = Image.fromarray(data['observation.images.exo'][0][0])
     plt.imshow(image)
