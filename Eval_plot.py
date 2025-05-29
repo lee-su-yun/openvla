@@ -6,6 +6,7 @@ from transformers import BitsAndBytesConfig
 device = "cuda:0" if torch.cuda.is_available() else "cpu"
 dtype = torch.bfloat16
 import numpy as np
+import matplotlib.pyplot as plt
 
 
 if __name__ == "__main__":
@@ -32,7 +33,7 @@ if __name__ == "__main__":
     import pickle
     import pandas as pd
 
-   # # 경로 설정
+   # 경로 설정
    #  source_base = "/sdb1/piper_subtask_data/train/pick/Pick the blue cup in the center."
    #  target_base = "/sdb1/piper_subtask_data/train/pick/train_np/Pick the blue cup in the center."
    #
@@ -57,8 +58,12 @@ if __name__ == "__main__":
    #
    #     print(f"Saved: {target_path}")
    #  exit()
-    with open("/sdb1/piper_subtask_data/train/pick/train_np/Pick the blue cup in the center./episode1.pickle", "rb") as f:
+   #  with open("/sdb1/piper_subtask_data/train/pick/train_np/Pick the blue cup in the center./episode1.pickle", "rb") as f:
+    with open("/sdb1/piper_subtask_data/train/pick/Pick the blue cup in the center./1/episode1.pickle", "rb") as f:
         data = pickle.load(f)
+    image = Image.fromarray(data['observation.images.exo'][0][0])
+    plt.imshow(image)
+    plt.show()
 
     # Load Processor & VLA
     #model_path = "/sdc1/piper_subtask/openvla/Norm/openvla-7b+piper5_hz_subtask+b16+lr-0.0005+val+lora-r32+dropout-0.0--image_aug+norm/step_10000"
