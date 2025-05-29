@@ -174,6 +174,30 @@ def relabel_bridge_actions(traj: Dict[str, Any]) -> Dict[str, Any]:
 
     return traj_truncated
 
+def relabel_piper_actions(traj: Dict[str, Any]) -> Dict[str, Any]:
+    """Relabels actions to use reached proprioceptive state; discards last timestep (no-action)."""
+    movement_actions = traj["observation"]["state"][1:, :6] - traj["observation"]["state"][:-1, :6]
+    traj_truncated = tf.nest.map_structure(lambda x: x[:-1], traj)
+    traj_truncated["action"] = tf.concat([movement_actions, traj["action"][:-1, -1:]], axis=1)
+
+    return traj_truncated
+
+def relabel_piper_actions2(traj: Dict[str, Any]) -> Dict[str, Any]:
+    """Relabels actions to use reached proprioceptive state; discards last timestep (no-action)."""
+    movement_actions = traj["observation"]["state"][1:, :6] - traj["observation"]["state"][:-1, :6]
+    gripper = traj["observation"]["state"][:-1, -1:]
+
+    nonzero_mask = ~tf.reduce_all(tf.equal(movement_actions, 0), axis=1)
+
+    traj_truncated = tf.nest.map_structure(lambda x: x[:-1], traj)
+    traj_truncated = tf.nest.map_structure(lambda x: tf.boolean_mask(x, nonzero_mask), traj_truncated)
+
+    filtered_movement = tf.boolean_mask(movement_actions, nonzero_mask)
+    filtered_gripper = tf.boolean_mask(gripper, nonzero_mask)
+    traj_truncated["action"] = tf.concat([filtered_movement, filtered_gripper], axis=1)
+
+    return traj_truncated
+
 
 # === RLDS Dataset Initialization Utilities ===
 def pprint_data_mixture(dataset_kwargs_list: List[Dict[str, Any]], dataset_weights: List[int]) -> None:

@@ -26,6 +26,7 @@ from prismatic.vla.datasets.rlds.utils.data_utils import (
     rel2abs_gripper_actions,
     relabel_bridge_actions,
     invert_piper_gripper,
+    relabel_piper_actions,
 )
 
 
@@ -846,6 +847,28 @@ def piper5hz_dataset_transform(trajectory: Dict[str, Any]) -> Dict[str, Any]:
     # actions = trajectory["action"]
     # gripper = (tf.cast(actions[:, -1:], tf.float32) + 1.0) / 2.0
     # trajectory["action"] = tf.concat([actions[:, :-1], gripper], axis=-1)
+    for key in trajectory.keys():
+        if key == "traj_metadata":
+            continue
+        elif key == "observation":
+            for key2 in trajectory[key]:
+                trajectory[key][key2] = trajectory[key][key2][1:]
+        else:
+            trajectory[key] = trajectory[key][1:]
+
+    trajectory["action"] = tf.concat(
+        [
+            trajectory["action"][:, :6],
+            binarize_gripper_actions(trajectory["action"][:, -1])[:, None],
+        ],
+        axis=1,
+    )
+
+    # ✅ use your Piper-specific relabel function
+    trajectory = relabel_piper_actions(trajectory)
+
+    trajectory["observation"]["EEF_state"] = trajectory["observation"]["state"][:, :6]
+    trajectory["observation"]["gripper_state"] = trajectory["observation"]["state"][:, -1:]
     return trajectory
 
 # === Registry ===
