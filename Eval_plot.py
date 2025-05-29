@@ -62,6 +62,10 @@ if __name__ == "__main__":
     with open("/sdb1/piper_subtask_data/train/pick/Pick the blue cup in the center./1/episode.pickle", "rb") as f:
         data = pickle.load(f)
     image = Image.fromarray(data['observation.images.exo'][0][0])
+    state = data['observation.images.exo'][0][0]
+    action = data['action'][0][0]
+    print(f'state : {state}\n')
+    print(f'action : {action}\n')
     plt.imshow(image)
     plt.show()
 
