@@ -105,7 +105,7 @@ if __name__ == "__main__":
     traj_111_latest = []
     #for i in range(50):
     #for i in range(0, 300, 6):
-    for i in range(30, 294, 6):
+    for i in range(30, 270, 6):
         image = Image.fromarray(data['observation.images.exo'][i][0])
 
         #
@@ -126,7 +126,7 @@ if __name__ == "__main__":
     ry = []
     rz = []
     g = []
-    for i in range(44):
+    for i in range(40):
         x.append(traj_111_latest[i][0])
         y.append(traj_111_latest[i][1])
         z.append(traj_111_latest[i][2])
@@ -149,7 +149,7 @@ if __name__ == "__main__":
 
     import plotly.graph_objects as go
     import numpy as np
-    timesteps = np.arange(44)
+    timesteps = np.arange(40)
     import matplotlib.pyplot as plt
     gt_111 = []
     x = []
@@ -159,7 +159,7 @@ if __name__ == "__main__":
     ry = []
     rz = []
     g = []
-    for i in range(30, 294, 6):
+    for i in range(30, 270, 6):
         # x.append(data['action'][i][0][0])
         # y.append(data['action'][i][0][1])
         # z.append(data['action'][i][0][2])
