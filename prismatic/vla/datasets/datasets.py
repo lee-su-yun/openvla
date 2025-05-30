@@ -9,6 +9,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Dict, Tuple, Type
 
+from matplotlib import pyplot as plt
 import numpy as np
 import torch
 from PIL import Image
@@ -39,6 +40,9 @@ class RLDSBatchTransform:
         """Converts a RLDS batch to the format expected by the OpenVLA collator/models."""
         dataset_name, action = rlds_batch["dataset_name"], rlds_batch["action"][0]
         img = Image.fromarray(rlds_batch["observation"]["image_primary"][0])
+        plt.imshow(img)
+        plt.show()
+        exit()
         lang = rlds_batch["task"]["language_instruction"].decode().lower()
 
 
