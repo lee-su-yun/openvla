@@ -304,15 +304,6 @@ def finetune(cfg: FinetuneConfig) -> None:
         collate_fn=collator,
         num_workers=0,  # Important =>> Set to 0 if using RLDS; TFDS rolls its own parallelism!
     )
-    sample_batch = next(iter(dataloader))
-    img_tensor = sample_batch["pixel_values"][0]
-    import torchvision.transforms as T
-    from PIL import Image
-
-    save_img = T.ToPILImage()(img_tensor.cpu())
-    save_img.save("sample_train_image.png")
-    print("Saved image as sample_train_image.png")
-    exit()
 
     ############
     # Load validation dataset (assume 'val' subdirectory exists in dataset)
