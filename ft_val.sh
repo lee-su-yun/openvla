@@ -4,8 +4,8 @@
   --vla_path "/sda1/openvla-7b" \
   --data_root_dir "/home/sylee/tensorflow_datasets" \
   --dataset_name "piper5_hz_subtask" \
-  --run_root_dir "/sdc1/piper_subtask/openvla/Top_Norm" \
-  --adapter_tmp_dir "/sdc1/piper_subtask/openvla/Top_Norm" \
+  --run_root_dir "/sdc1/piper_subtask/openvla/Test" \
+  --adapter_tmp_dir "/sdc1/piper_subtask/openvla/Test" \
   --lora_rank 32 \
   --batch_size 8 \
   --grad_accumulation_steps 2 \
