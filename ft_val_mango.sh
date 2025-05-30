@@ -4,8 +4,8 @@
   --vla_path "/ckpt/openvla-7b" \
   --data_root_dir "/home/sylee/tensorflow_datasets" \
   --dataset_name "piper5_hz_subtask" \
-  --run_root_dir "/ckpt/piper_subtask/openvla/Fully" \
-  --adapter_tmp_dir "/ckpt/piper_subtask/openvla/Fully" \
+  --run_root_dir "/ckpt/piper_subtask/openvla/lora_table" \
+  --adapter_tmp_dir "/ckpt/piper_subtask/openvla/lora_table" \
   --lora_rank 32 \
   --batch_size 8 \
   --grad_accumulation_steps 2 \

@@ -178,7 +178,7 @@ def finetune(cfg: FinetuneConfig) -> None:
     )
     exp_id += "+val"
     if cfg.use_lora:
-        exp_id += f"+qlora-r{cfg.lora_rank}+dropout-{cfg.lora_dropout}"
+        exp_id += f"+lora-r{cfg.lora_rank}+dropout-{cfg.lora_dropout}"
     if cfg.use_quantization:
         exp_id += "+q-4bit"
     if cfg.run_id_note is not None:
@@ -272,12 +272,12 @@ def finetune(cfg: FinetuneConfig) -> None:
         image_transform=processor.image_processor.apply_transform,
         prompt_builder_fn=PurePromptBuilder if "v01" not in cfg.vla_path else VicunaV15ChatPromptBuilder,
     )
-    # val_batch_transform = RLDSBatchTransform(
-    #     action_tokenizer,
-    #     processor.tokenizer,
-    #     image_transform=processor.image_processor.apply_transform,
-    #     prompt_builder_fn=PurePromptBuilder if "v01" not in cfg.vla_path else VicunaV15ChatPromptBuilder,
-    # )
+    val_batch_transform = RLDSBatchTransform(
+        action_tokenizer,
+        processor.tokenizer,
+        image_transform=processor.image_processor.apply_transform,
+        prompt_builder_fn=PurePromptBuilder if "v01" not in cfg.vla_path else VicunaV15ChatPromptBuilder,
+    )
 
     vla_dataset = RLDSDataset(
         cfg.data_root_dir,
@@ -307,21 +307,21 @@ def finetune(cfg: FinetuneConfig) -> None:
 
     ############
     # Load validation dataset (assume 'val' subdirectory exists in dataset)
-    # val_dataset = RLDSDataset(
-    #     cfg.data_root_dir,
-    #     "piper5_hz_val",  # or dataset_name + "_val" if you store separately
-    #     val_batch_transform,
-    #     resize_resolution=tuple(model.config.image_sizes),
-    #     shuffle_buffer_size=1,  # no shuffle needed
-    #     image_aug=False  # important: no augmentation for validation!
-    # )
-    # val_dataloader = DataLoader(
-    #     val_dataset,
-    #     batch_size=cfg.batch_size,
-    #     sampler=None,
-    #     collate_fn=collator,
-    #     num_workers=0
-    # )
+    val_dataset = RLDSDataset(
+        cfg.data_root_dir,
+        "piper5_hz_val",  # or dataset_name + "_val" if you store separately
+        val_batch_transform,
+        resize_resolution=tuple(model.config.image_sizes),
+        shuffle_buffer_size=1,  # no shuffle needed
+        image_aug=False  # important: no augmentation for validation!
+    )
+    val_dataloader = DataLoader(
+        val_dataset,
+        batch_size=cfg.batch_size,
+        sampler=None,
+        collate_fn=collator,
+        num_workers=0
+    )
     # print(f"len(dataloader): {len(dataloader)}")
     # print(f"type(dataloader): {type(dataloader)}")
     # print(f"type(dataloader.dataset): {type(dataloader.dataset)}")
@@ -410,17 +410,17 @@ def finetune(cfg: FinetuneConfig) -> None:
                     step=gradient_step_idx,
                 )
 
-                # # Run validation after wandb.log to avoid interference
-                # val_loss, val_acc, val_l1 = evaluate(vla, val_dataloader, device, action_tokenizer)
-                # wandb.log(
-                #     {
-                #         "val_loss": val_loss,
-                #         "val_action_accuracy": val_acc,
-                #         "val_l1_loss": val_l1
-                #     },
-                #     step=gradient_step_idx,
-                # )
-                # print(f"Validation step {gradient_step_idx} | loss: {val_loss:.4f}, acc: {val_acc:.4f}, l1: {val_l1:.4f}")
+                # Run validation after wandb.log to avoid interference
+                val_loss, val_acc, val_l1 = evaluate(vla, val_dataloader, device, action_tokenizer)
+                wandb.log(
+                    {
+                        "val_loss": val_loss,
+                        "val_action_accuracy": val_acc,
+                        "val_l1_loss": val_l1
+                    },
+                    step=gradient_step_idx,
+                )
+                print(f"Validation step {gradient_step_idx} | loss: {val_loss:.4f}, acc: {val_acc:.4f}, l1: {val_l1:.4f}")
 
             # Optimizer Step
             if (batch_idx + 1) % cfg.grad_accumulation_steps == 0:
