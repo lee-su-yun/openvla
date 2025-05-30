@@ -104,7 +104,8 @@ if __name__ == "__main__":
 
     traj_111_latest = []
     #for i in range(50):
-    for i in range(0, 300, 6):
+    #for i in range(0, 300, 6):
+    for i in range(30, 296, 6):
         image = Image.fromarray(data['observation.images.exo'][i][0])
 
         #
@@ -125,7 +126,7 @@ if __name__ == "__main__":
     ry = []
     rz = []
     g = []
-    for i in range(50):
+    for i in range(44):
         x.append(traj_111_latest[i][0])
         y.append(traj_111_latest[i][1])
         z.append(traj_111_latest[i][2])
@@ -148,7 +149,7 @@ if __name__ == "__main__":
 
     import plotly.graph_objects as go
     import numpy as np
-    timesteps = np.arange(50)
+    timesteps = np.arange(44)
     import matplotlib.pyplot as plt
     gt_111 = []
     x = []
@@ -158,14 +159,21 @@ if __name__ == "__main__":
     ry = []
     rz = []
     g = []
-    for i in range(0, 300, 6):
-        x.append(data['action'][i][0][0])
-        y.append(data['action'][i][0][1])
-        z.append(data['action'][i][0][2])
-        rx.append(data['action'][i][0][3])
-        ry.append(data['action'][i][0][4])
-        rz.append(data['action'][i][0][5])
-        g.append(data['action'][i][0][6])
+    for i in range(30, 296, 6):
+        # x.append(data['action'][i][0][0])
+        # y.append(data['action'][i][0][1])
+        # z.append(data['action'][i][0][2])
+        # rx.append(data['action'][i][0][3])
+        # ry.append(data['action'][i][0][4])
+        # rz.append(data['action'][i][0][5])
+        # g.append(data['action'][i][0][6])
+        x.append(data['state'][i+1][0][0]-data['state'][i][0][0])
+        y.append(data['state'][i+1][0][1]-data['state'][i][0][1])
+        z.append(data['state'][i+1][0][2]-data['state'][i][0][2])
+        rx.append(data['state'][i+1][0][3]-data['state'][i][0][3])
+        ry.append(data['state'][i+1][0][4]-data['state'][i][0][4])
+        rz.append(data['state'][i+1][0][5]-data['state'][i][0][5])
+        g.append(data['state'][i+1][0][6]-data['state'][i][0][6])
     gt_111.append(x)
     gt_111.append(y)
     gt_111.append(z)
@@ -178,8 +186,8 @@ if __name__ == "__main__":
     pre_trajectory_array = np.stack(predictions_111_latest, axis=1)
 
     # 저장
-    np.save("gt_train.npy", trajectory_array)
-    np.save("predict_train.npy", pre_trajectory_array)
+    # np.save("gt_train.npy", trajectory_array)
+    # np.save("predict_train.npy", pre_trajectory_array)
     fig_111_latest = go.Figure(data=[go.Scatter3d(
         x=predictions_111_latest[0], y=predictions_111_latest[1], z=predictions_111_latest[2],
         mode='lines+markers',
@@ -212,7 +220,7 @@ if __name__ == "__main__":
         ),
     )])
     fig_111_latest.show()
-    fig_111_latest.write_html("Train.html")
+    fig_111_latest.write_html("delta.html")
     #Pick_the_blue_cup_on_the_right
     #Pick_the_white_cup_nearest_from_the_robot
     #Pick_the_red_cup_behind_the_purple_one
@@ -221,7 +229,7 @@ if __name__ == "__main__":
         n = f'71{i + 1}'
         plt.subplot(int(n))
         plt.plot(predictions_111_latest[i], 'b--', gt_111[i], 'r')
-    plt.savefig("Train.png")
+    plt.savefig("delta.png")
     plt.show()
 
 # #######################################################################################
