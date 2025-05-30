@@ -61,7 +61,7 @@ if __name__ == "__main__":
    #  exit()
    #  with open("/sdb1/piper_subtask_data/train/pick/train_np/Pick the blue cup in the center./episode1.pickle", "rb") as f:
     #with open("/sdb1/piper_subtask_data/train/pick/Pick the blue cup in the center./1/episode.pickle", "rb") as f:
-    with open("/data/piper_subtask_data/Val/Pick the blue cup on the right./episode.pickle", "rb") as f:
+    with open("/data/piper_subtask_data/Train/Pick the blue cup in the center./episode.pickle", "rb") as f:
         data = pickle.load(f)
     # image = Image.fromarray(data['observation.images.exo'][0][0])
     # state = data['observation.images.exo'][0][0]
@@ -114,7 +114,7 @@ if __name__ == "__main__":
         # image_bgr = Image.fromarray(np_img_bgr)
 
 
-        prompt = "In: What should the robot do to pick the blue cup on the right?\nOut:"
+        prompt = "In: What should the robot do to pick the blue cup in the center?\nOut:"
         inputs = processor(prompt, image).to(device, dtype=torch.bfloat16)
         action = vla.predict_action(**inputs, unnorm_key="piper5_hz_subtask", do_sample=False)
         traj_111_latest.append(action)
