@@ -7,7 +7,7 @@
   --run_root_dir "/sdc1/piper_subtask/openvla/Test" \
   --adapter_tmp_dir "/sdc1/piper_subtask/openvla/Test" \
   --lora_rank 32 \
-  --batch_size 8 \
+  --batch_size 1 \
   --grad_accumulation_steps 2 \
   --learning_rate 5e-4 \
   --image_aug True \
