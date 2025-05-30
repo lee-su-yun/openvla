@@ -114,7 +114,7 @@ if __name__ == "__main__":
         # image_bgr = Image.fromarray(np_img_bgr)
 
 
-        prompt = "In: What should the robot do to pick the blue cup in the center?\nOut:"
+        prompt = "In: What should the robot do to pick the blue cup on the right?\nOut:"
         inputs = processor(prompt, image).to(device, dtype=torch.bfloat16)
         action = vla.predict_action(**inputs, unnorm_key="piper5_hz_subtask", do_sample=False)
         traj_111_latest.append(action)
