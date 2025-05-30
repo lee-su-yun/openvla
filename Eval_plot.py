@@ -63,13 +63,13 @@ if __name__ == "__main__":
     #with open("/sdb1/piper_subtask_data/train/pick/Pick the blue cup in the center./1/episode.pickle", "rb") as f:
     with open("/data/piper_subtask_data/Val/Pick the blue cup on the right./episode.pickle", "rb") as f:
         data = pickle.load(f)
-    image = Image.fromarray(data['observation.images.exo'][0][0])
-    state = data['observation.images.exo'][0][0]
-    action = data['action'][0][0]
-    print(f'state : {state}\n')
-    print(f'action : {action}\n')
-    plt.imshow(image)
-    plt.show()
+    # image = Image.fromarray(data['observation.images.exo'][0][0])
+    # state = data['observation.images.exo'][0][0]
+    # action = data['action'][0][0]
+    # print(f'state : {state}\n')
+    # print(f'action : {action}\n')
+    # plt.imshow(image)
+    # plt.show()
 
     # Load Processor & VLA
     #model_path = "/sdc1/piper_subtask/openvla/Norm/openvla-7b+piper5_hz_subtask+b16+lr-0.0005+val+lora-r32+dropout-0.0--image_aug+norm/step_10000"
