@@ -43,6 +43,7 @@ class RLDSBatchTransform:
         plt.imshow(img)
         plt.show()
         exit()
+
         lang = rlds_batch["task"]["language_instruction"].decode().lower()
 
 
