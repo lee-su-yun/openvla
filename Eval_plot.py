@@ -60,7 +60,8 @@ if __name__ == "__main__":
    #     print(f"Saved: {target_path}")
    #  exit()
    #  with open("/sdb1/piper_subtask_data/train/pick/train_np/Pick the blue cup in the center./episode1.pickle", "rb") as f:
-    with open("/sdb1/piper_subtask_data/train/pick/Pick the blue cup in the center./1/episode.pickle", "rb") as f:
+    #with open("/sdb1/piper_subtask_data/train/pick/Pick the blue cup in the center./1/episode.pickle", "rb") as f:
+    with open("/data/piper_subtask_data/Val/Pick the blue cup on the right./episode.pickle", "rb") as f:
         data = pickle.load(f)
     image = Image.fromarray(data['observation.images.exo'][0][0])
     state = data['observation.images.exo'][0][0]
@@ -83,7 +84,7 @@ if __name__ == "__main__":
         torch_dtype=dtype,
         #low_cpu_mem_usage=True,
         low_cpu_mem_usage=True,
-        quantization_config=BitsAndBytesConfig(load_in_4bit=True, bnb_4bit_quant_type="nf4", bnb_4bit_use_double_quant=True, bnb_4bit_compute_dtype=dtype),
+     #   quantization_config=BitsAndBytesConfig(load_in_4bit=True, bnb_4bit_quant_type="nf4", bnb_4bit_use_double_quant=True, bnb_4bit_compute_dtype=dtype),
         trust_remote_code=True
     ).to(device)
 
