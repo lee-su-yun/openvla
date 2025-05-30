@@ -42,11 +42,6 @@ class RLDSBatchTransform:
         """Converts a RLDS batch to the format expected by the OpenVLA collator/models."""
         dataset_name, action = rlds_batch["dataset_name"], rlds_batch["action"][0]
         img = Image.fromarray(rlds_batch["observation"]["image_primary"][0])
-        print("rlds_batch keys:", rlds_batch.keys())
-        print("rlds_batch['observation'] keys:", rlds_batch['observation'].keys())
-        # save_path = "test.png"
-        # img.save(save_path)
-        exit()
         lang = rlds_batch["task"]["language_instruction"].decode().lower()
 
 
