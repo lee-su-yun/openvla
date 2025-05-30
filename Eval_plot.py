@@ -105,7 +105,7 @@ if __name__ == "__main__":
     traj_111_latest = []
     #for i in range(50):
     #for i in range(0, 300, 6):
-    for i in range(30, 296, 6):
+    for i in range(30, 294, 6):
         image = Image.fromarray(data['observation.images.exo'][i][0])
 
         #
@@ -159,7 +159,7 @@ if __name__ == "__main__":
     ry = []
     rz = []
     g = []
-    for i in range(30, 296, 6):
+    for i in range(30, 294, 6):
         # x.append(data['action'][i][0][0])
         # y.append(data['action'][i][0][1])
         # z.append(data['action'][i][0][2])
@@ -167,13 +167,13 @@ if __name__ == "__main__":
         # ry.append(data['action'][i][0][4])
         # rz.append(data['action'][i][0][5])
         # g.append(data['action'][i][0][6])
-        x.append(data['state'][i+1][0][0]-data['state'][i][0][0])
-        y.append(data['state'][i+1][0][1]-data['state'][i][0][1])
-        z.append(data['state'][i+1][0][2]-data['state'][i][0][2])
-        rx.append(data['state'][i+1][0][3]-data['state'][i][0][3])
-        ry.append(data['state'][i+1][0][4]-data['state'][i][0][4])
-        rz.append(data['state'][i+1][0][5]-data['state'][i][0][5])
-        g.append(data['state'][i+1][0][6]-data['state'][i][0][6])
+        x.append(data['observation.state'][i+1][0][0]-data['observation.state'][i][0][0])
+        y.append(data['observation.state'][i+1][0][1]-data['observation.state'][i][0][1])
+        z.append(data['observation.state'][i+1][0][2]-data['observation.state'][i][0][2])
+        rx.append(data['observation.state'][i+1][0][3]-data['observation.state'][i][0][3])
+        ry.append(data['observation.state'][i+1][0][4]-data['observation.state'][i][0][4])
+        rz.append(data['observation.state'][i+1][0][5]-data['observation.state'][i][0][5])
+        g.append(data['observation.state'][i+1][0][6]-data['observation.state'][i][0][6])
     gt_111.append(x)
     gt_111.append(y)
     gt_111.append(z)
