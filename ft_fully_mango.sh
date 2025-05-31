@@ -3,7 +3,7 @@ CUDA_VISIBLE_DEVICES=1,2,3,4,5 torchrun \
   --vla_path "/ckpt/openvla-7b" \
   --data_root_dir "/home/sylee/tensorflow_datasets" \
   --dataset_name "piper5_hz_subtask" \
-  --run_root_dir "/ckpt/piper_subtask/openvla/Full_FT" \
+  --run_root_dir "/ckpt/piper_subtask/openvla/FullFT_table" \
   --batch_size 2 \
   --grad_accumulation_steps 8 \
   --learning_rate 5e-4 \

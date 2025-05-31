@@ -409,7 +409,7 @@ def finetune(cfg: FinetuneConfig) -> None:
                     },
                     step=gradient_step_idx,
                 )
-
+            if gradient_step_idx % 100 == 0:
                 # Run validation after wandb.log to avoid interference
                 val_loss, val_acc, val_l1 = evaluate(vla, val_dataloader, device, action_tokenizer)
                 wandb.log(
