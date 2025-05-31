@@ -330,30 +330,15 @@ def finetune(cfg: FinetuneConfig) -> None:
     )
 
 
-    # 1. 샘플 하나 가져오기
-    import torchvision.transforms.functional as F
 
-    # 1. 데이터셋 iterator 만들기
-    val_iter = iter(val_dataset)
+    print(f"len(dataloader): {len(dataloader)}")
+    print(f"type(dataloader): {type(dataloader)}")
+    print(f"type(dataloader.dataset): {type(dataloader.dataset)}")
 
-    # 2. 첫 번째 샘플 가져오기
-    sample = next(val_iter)
-
-    # 3. 이미지 tensor 추출 후 PIL로 변환
-    img_tensor = sample["pixel_values"]  # (3, H, W)
-    img_pil = F.to_pil_image(img_tensor)
-
-    # 4. 이미지 저장
-    img_pil.save("val_sample_0_raw.png")
+    print(f"len(dataloader): {len(val_dataloader)}")
+    print(f"type(dataloader): {type(val_dataloader)}")
+    print(f"type(dataloader.dataset): {type(val_dataloader.dataset)}")
     exit()
-    # print(f"len(dataloader): {len(dataloader)}")
-    # print(f"type(dataloader): {type(dataloader)}")
-    # print(f"type(dataloader.dataset): {type(dataloader.dataset)}")
-    #
-    # print(f"len(dataloader): {len(val_dataloader)}")
-    # print(f"type(dataloader): {type(val_dataloader)}")
-    # print(f"type(dataloader.dataset): {type(val_dataloader.dataset)}")
-    # exit()
     # val_loss, val_acc, val_l1 = evaluate(vla, val_dataloader, device, action_tokenizer)
 
     val_every_n_steps = 100*cfg.grad_accumulation_steps
