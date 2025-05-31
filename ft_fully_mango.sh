@@ -1,9 +1,9 @@
-torchrun \
-  --standalone --nnodes 1 --nproc-per-node 1 vla-scripts/finetune_fully.py \
+CUDA_VISIBLE_DEVICES=1,2,3 torchrun \
+  --standalone --nnodes 1 --nproc-per-node 3 vla-scripts/finetune_fully.py \
   --vla_path "/ckpt/openvla-7b" \
   --data_root_dir "/home/sylee/tensorflow_datasets" \
   --dataset_name "piper5_hz_subtask" \
-  --run_root_dir "/ckpt/piper_subtask/openvla/Fully" \
+  --run_root_dir "/ckpt/piper_subtask/openvla/Full_FT" \
   --batch_size 1 \
   --grad_accumulation_steps 16 \
   --learning_rate 5e-4 \
