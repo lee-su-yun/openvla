@@ -1,5 +1,5 @@
 CUDA_VISIBLE_DEVICES=1,2,3,4,5 torchrun \
-  --standalone --nnodes 1 --nproc-per-node 3 vla-scripts/finetune_fully.py \
+  --standalone --nnodes 1 --nproc-per-node 5 vla-scripts/finetune_fully.py \
   --vla_path "/ckpt/openvla-7b" \
   --data_root_dir "/home/sylee/tensorflow_datasets" \
   --dataset_name "piper5_hz_subtask" \

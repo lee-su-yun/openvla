@@ -329,16 +329,21 @@ def finetune(cfg: FinetuneConfig) -> None:
         num_workers=0
     )
 
-    import torchvision.transforms.functional as F
 
     # 1. 샘플 하나 가져오기
-    sample = val_dataset[0]
+    import torchvision.transforms.functional as F
 
-    # 2. 텐서를 PIL 이미지로 변환 (정규화 안 풀고 그냥 보기용)
-    img_tensor = sample["pixel_values"]
+    # 1. 데이터셋 iterator 만들기
+    val_iter = iter(val_dataset)
+
+    # 2. 첫 번째 샘플 가져오기
+    sample = next(val_iter)
+
+    # 3. 이미지 tensor 추출 후 PIL로 변환
+    img_tensor = sample["pixel_values"]  # (3, H, W)
     img_pil = F.to_pil_image(img_tensor)
 
-    # 3. 이미지 저장
+    # 4. 이미지 저장
     img_pil.save("val_sample_0_raw.png")
     exit()
     # print(f"len(dataloader): {len(dataloader)}")
