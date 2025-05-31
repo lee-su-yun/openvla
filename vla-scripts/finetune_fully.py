@@ -278,12 +278,12 @@ def finetune(cfg: FinetuneConfig) -> None:
         image_transform=processor.image_processor.apply_transform,
         prompt_builder_fn=PurePromptBuilder if "v01" not in cfg.vla_path else VicunaV15ChatPromptBuilder,
     )
-    # val_batch_transform = RLDSBatchTransform(
-    #     action_tokenizer,
-    #     processor.tokenizer,
-    #     image_transform=processor.image_processor.apply_transform,
-    #     prompt_builder_fn=PurePromptBuilder if "v01" not in cfg.vla_path else VicunaV15ChatPromptBuilder,
-    # )
+    val_batch_transform = RLDSBatchTransform(
+        action_tokenizer,
+        processor.tokenizer,
+        image_transform=processor.image_processor.apply_transform,
+        prompt_builder_fn=PurePromptBuilder if "v01" not in cfg.vla_path else VicunaV15ChatPromptBuilder,
+    )
 
     vla_dataset = RLDSDataset(
         cfg.data_root_dir,
@@ -313,21 +313,34 @@ def finetune(cfg: FinetuneConfig) -> None:
     )
     ############
     # Load validation dataset (assume 'val' subdirectory exists in dataset)
-    # val_dataset = RLDSDataset(
-    #     cfg.data_root_dir,
-    #     "piper5_hz_val",  # or dataset_name + "_val" if you store separately
-    #     val_batch_transform,
-    #     resize_resolution=tuple(model.config.image_sizes),
-    #     shuffle_buffer_size=1,  # no shuffle needed
-    #     image_aug=False  # important: no augmentation for validation!
-    # )
-    # val_dataloader = DataLoader(
-    #     val_dataset,
-    #     batch_size=cfg.batch_size,
-    #     sampler=None,
-    #     collate_fn=collator,
-    #     num_workers=0
-    # )
+    val_dataset = RLDSDataset(
+        cfg.data_root_dir,
+        "piper5_hz_val",  # or dataset_name + "_val" if you store separately
+        val_batch_transform,
+        resize_resolution=tuple(vla.module.config.image_sizes),
+        shuffle_buffer_size=1,  # no shuffle needed
+        image_aug=False  # important: no augmentation for validation!
+    )
+    val_dataloader = DataLoader(
+        val_dataset,
+        batch_size=cfg.batch_size,
+        sampler=None,
+        collate_fn=collator,
+        num_workers=0
+    )
+
+    import torchvision.transforms.functional as F
+
+    # 1. 샘플 하나 가져오기
+    sample = val_dataset[0]
+
+    # 2. 텐서를 PIL 이미지로 변환 (정규화 안 풀고 그냥 보기용)
+    img_tensor = sample["pixel_values"]
+    img_pil = F.to_pil_image(img_tensor)
+
+    # 3. 이미지 저장
+    img_pil.save("val_sample_0_raw.png")
+    exit()
     # print(f"len(dataloader): {len(dataloader)}")
     # print(f"type(dataloader): {type(dataloader)}")
     # print(f"type(dataloader.dataset): {type(dataloader.dataset)}")
