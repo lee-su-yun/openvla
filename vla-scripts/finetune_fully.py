@@ -433,7 +433,7 @@ def finetune(cfg: FinetuneConfig) -> None:
 
                 # # Run validation after wandb.log to avoid interference
             if distributed_state.is_main_process and gradient_step_idx % 100 == 0:
-                val_loss, val_acc, val_l1 = evaluate(vla, val_dataloader, device, action_tokenizer)
+                val_loss, val_acc, val_l1 = evaluate(vla, val_dataloader, device_id, action_tokenizer)
                 wandb.log(
                     {
                         "val_loss": val_loss,
