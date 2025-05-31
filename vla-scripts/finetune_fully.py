@@ -331,6 +331,18 @@ def finetune(cfg: FinetuneConfig) -> None:
 
 
 
+    # 1. 데이터셋 iterator 만들기
+    val_iter = iter(val_dataset)
+    train_iter = iter(dataloader)
+
+    # 2. 첫 번째 샘플 가져오기
+    sample = next(val_iter)
+    sample2 = next(train_iter)
+
+    # 3. 이미지 tensor 추출 후 PIL로 변환
+    img_tensor1 = sample["pixel_values"]  # (3, H, W)
+    img_tensor2 = sample2["pixel_values"]
+
     print(f"len(dataloader): {len(dataloader)}")
     print(f"type(dataloader): {type(dataloader)}")
     print(f"type(dataloader.dataset): {type(dataloader.dataset)}")
