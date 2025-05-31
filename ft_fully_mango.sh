@@ -13,4 +13,4 @@ CUDA_VISIBLE_DEVICES=1,2,3,4,5 torchrun \
   --save_steps 1000 \
   --max_steps 10000 \
   --use_lora False \
-  --use_quantization False
+  --use_quantization True
