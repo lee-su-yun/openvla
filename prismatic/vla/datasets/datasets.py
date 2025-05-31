@@ -23,7 +23,7 @@ from prismatic.vla.action_tokenizer import ActionTokenizer
 from prismatic.vla.datasets.rlds import make_interleaved_dataset, make_single_dataset
 from prismatic.vla.datasets.rlds.oxe import OXE_NAMED_MIXTURES, get_oxe_dataset_kwargs_and_weights
 from prismatic.vla.datasets.rlds.utils.data_utils import NormalizationType
-
+import os
 
 import torchvision.transforms as T
 # HuggingFace Default / LLaMa-2 IGNORE_INDEX (for labels)
@@ -42,6 +42,8 @@ class RLDSBatchTransform:
         """Converts a RLDS batch to the format expected by the OpenVLA collator/models."""
         dataset_name, action = rlds_batch["dataset_name"], rlds_batch["action"][0]
         img = Image.fromarray(rlds_batch["observation"]["image_primary"][0])
+        os.makedirs("debug_images", exist_ok=True)  # 디렉토리 생성
+        img.save(f"debug_images/{dataset_name}.png")
         lang = rlds_batch["task"]["language_instruction"].decode().lower()
 
 
