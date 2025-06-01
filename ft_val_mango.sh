@@ -13,6 +13,6 @@
   --image_aug True \
   --wandb_project "openvla" \
   --wandb_entity "suyunlee-seoul-national-university" \
-  --save_steps 10 \
+  --save_steps 50 \
   --max_steps 1000 \
   --use_quantization False
