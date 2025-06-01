@@ -322,14 +322,14 @@ def finetune(cfg: FinetuneConfig) -> None:
         collate_fn=collator,
         num_workers=0
     )
-    print(f"len(dataloader): {len(dataloader)}")
-    print(f"type(dataloader): {type(dataloader)}")
-    print(f"type(dataloader.dataset): {type(dataloader.dataset)}")
-
-    print(f"len(val_dataloader): {len(val_dataloader)}")
-    print(f"type(val_dataloader): {type(val_dataloader)}")
-    print(f"type(val_dataloader.dataset): {type(val_dataloader.dataset)}")
-    exit()
+    # print(f"len(dataloader): {len(dataloader)}")
+    # print(f"type(dataloader): {type(dataloader)}")
+    # print(f"type(dataloader.dataset): {type(dataloader.dataset)}")
+    #
+    # print(f"len(val_dataloader): {len(val_dataloader)}")
+    # print(f"type(val_dataloader): {type(val_dataloader)}")
+    # print(f"type(val_dataloader.dataset): {type(val_dataloader.dataset)}")
+    # exit()
     # val_loss, val_acc, val_l1 = evaluate(vla, val_dataloader, device, action_tokenizer)
 
     val_every_n_steps = 100*cfg.grad_accumulation_steps
@@ -409,7 +409,7 @@ def finetune(cfg: FinetuneConfig) -> None:
                     },
                     step=gradient_step_idx,
                 )
-            if gradient_step_idx % 100 == 0 and gradient_step_idx!=0:
+            if gradient_step_idx % 10 == 0:# and gradient_step_idx!=0:
                 # Run validation after wandb.log to avoid interference
                 val_loss, val_acc, val_l1 = evaluate(vla, val_dataloader, device, action_tokenizer)
                 wandb.log(
