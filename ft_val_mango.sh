@@ -7,8 +7,8 @@
   --run_root_dir "/ckpt/piper_subtask/openvla/lora_table_low_epoch" \
   --adapter_tmp_dir "/ckpt/piper_subtask/openvla/lora_table_low_epoch" \
   --lora_rank 32 \
-  --batch_size 8 \
-  --grad_accumulation_steps 2 \
+  --batch_size 4 \
+  --grad_accumulation_steps 4 \
   --learning_rate 5e-4 \
   --image_aug True \
   --wandb_project "openvla" \
