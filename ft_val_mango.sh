@@ -4,8 +4,8 @@
   --vla_path "/ckpt/openvla-7b" \
   --data_root_dir "/home/sylee/tensorflow_datasets" \
   --dataset_name "piper5_hz_subtask" \
-  --run_root_dir "/ckpt/piper_subtask/openvla/lora_table" \
-  --adapter_tmp_dir "/ckpt/piper_subtask/openvla/lora_table" \
+  --run_root_dir "/ckpt/piper_subtask/openvla/lora_table_low_epoch" \
+  --adapter_tmp_dir "/ckpt/piper_subtask/openvla/lora_table_low_epoch" \
   --lora_rank 32 \
   --batch_size 8 \
   --grad_accumulation_steps 2 \
@@ -13,6 +13,6 @@
   --image_aug True \
   --wandb_project "openvla" \
   --wandb_entity "suyunlee-seoul-national-university" \
-  --save_steps 1000 \
-  --max_steps 10000 \
+  --save_steps 10 \
+  --max_steps 1000 \
   --use_quantization False
