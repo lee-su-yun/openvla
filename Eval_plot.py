@@ -60,9 +60,9 @@ if __name__ == "__main__":
    #     print(f"Saved: {target_path}")
    #  exit()
    #  with open("/sdb1/piper_subtask_data/train/pick/train_np/Pick the blue cup in the center./episode1.pickle", "rb") as f:
-    #with open("/sdb1/piper_subtask_data/train/pick/Pick the blue cup in the center./1/episode.pickle", "rb") as f:
+    with open("/sdb1/piper_subtask_data/train/pick/Pick the blue cup in the center./1/episode.pickle", "rb") as f:
     #with open("/data/piper_subtask_data/Train/Pick the blue cup in the center./episode.pickle", "rb") as f:
-    with open("/data/piper_subtask_data/Val/Pick the yellow cup./episode.pickle", "rb") as f:
+    #with open("/data/piper_subtask_data/Val/Pick the yellow cup./episode.pickle", "rb") as f:
         data = pickle.load(f)
 
     print(type(data))  # 1. 최상위 타입 (list, dict 등)
