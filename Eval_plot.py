@@ -64,6 +64,16 @@ if __name__ == "__main__":
     #with open("/data/piper_subtask_data/Train/Pick the blue cup in the center./episode.pickle", "rb") as f:
     with open("/data/piper_subtask_data/Val/Pick the yellow cup./episode.pickle", "rb") as f:
         data = pickle.load(f)
+
+    print(type(data))  # 1. 최상위 타입 (list, dict 등)
+    print(len(data))  # 2. 전체 길이 (프레임 수 등)
+    print(type(data[0]))  # 3. 프레임 단위 요소 타입
+    print(data[0].keys())  # 4. 프레임의 key 목록
+
+    import pprint
+
+    pprint.pprint(data[0])
+    exit()
     # image = Image.fromarray(data['observation.images.exo'][0][0])
     # state = data['observation.images.exo'][0][0]
     # action = data['action'][0][0]
