@@ -61,7 +61,7 @@ if __name__ == "__main__":
    #  exit()
     import json
     data_list = []
-    with open("/sdb1/piper_lerobot/lerobot_aligncups_5hz/train/meta/episodes.jsonl", "r") as f:
+    with open("/sdb1/piper_lerobot/lerobot_aligncups_5hz/test/meta/episodes.jsonl", "r") as f:
         for line in f:
             data_list.append(json.loads(line))
 
