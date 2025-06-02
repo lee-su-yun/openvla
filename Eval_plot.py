@@ -72,7 +72,7 @@ if __name__ == "__main__":
 
     import pprint
 
-    pprint.pprint(data[0])
+    pprint.pprint(data)
     exit()
     # image = Image.fromarray(data['observation.images.exo'][0][0])
     # state = data['observation.images.exo'][0][0]
