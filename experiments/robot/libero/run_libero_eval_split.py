@@ -147,15 +147,19 @@ def eval_libero(cfg: GenerateConfig) -> None:
     total_episodes, total_successes = 0, 0
     #for task_id in tqdm.tqdm(range(num_tasks_in_suite)):
     #for task_id in tqdm.tqdm([0, 1, 7]):
+    second_task = 1
     for task_id in tqdm.tqdm([0]):
         # Get task
         task = task_suite.get_task(task_id)
+        task2 = task_suite.get_task(second_task)
 
         # Get default LIBERO initial states
         initial_states = task_suite.get_task_init_states(task_id)
+        initial_states2 = task_suite.get_task_init_states(second_task)
 
         # Initialize LIBERO environment and task description
         env, task_description = get_libero_env(task, cfg.model_family, resolution=256)
+        env2, task_description2 = get_libero_env(task2, cfg.model_family, resolution=256)
 
         # For custom two-step instruction execution
         instruction_1 = "pick up the alphabet soup and place it in the basket"
@@ -164,18 +168,21 @@ def eval_libero(cfg: GenerateConfig) -> None:
         # Start episodes
         task_episodes, task_successes = 0, 0
         for episode_idx in tqdm.tqdm(range(cfg.num_trials_per_task)):
-            print(f"\nTask: {task_description}")
-            log_file.write(f"\nTask: {task_description}\n")
+            print(f"\nTask: {task_description} and {task_description2}")
+            log_file.write(f"\nTask: {task_description} and {task_description2}\n")
 
             # Reset environment
             env.reset()
+            env2.reset()
 
             # Set initial states
             obs = env.set_init_state(initial_states[episode_idx])
+            obs2 = env2.set_init_state(initial_states2[episode_idx])
 
             # Setup
             t = 0
             replay_images = []
+            replay_images2 = []
             if cfg.task_suite_name == "libero_spatial":
                 max_steps = 220  # longest training demo has 193 steps
             elif cfg.task_suite_name == "libero_object":
@@ -198,53 +205,79 @@ def eval_libero(cfg: GenerateConfig) -> None:
                     # IMPORTANT: Do nothing for the first few timesteps because the simulator drops objects
                     # and we need to wait for them to fall
                     if t < cfg.num_steps_wait:
-                        obs, reward, done, info = env.step(get_libero_dummy_action(cfg.model_family))
+                        obs, reward, done_1, info = env.step(get_libero_dummy_action(cfg.model_family))
+                        obs2, reward2, done_2, info2 = env2.step(get_libero_dummy_action(cfg.model_family))
                         t += 1
                         continue
 
                     # Get preprocessed image
                     img = get_libero_image(obs, resize_size)
+                    img2 = get_libero_image(obs2, resize_size)
 
                     # Save preprocessed image for replay video
                     replay_images.append(img)
+                    replay_images2.append(img2)
 
                     # Prepare observations dict
                     # Note: OpenVLA does not take proprio state as input
-                    observation = {
-                        "full_image": img,
-                        "state": np.concatenate(
-                            (obs["robot0_eef_pos"], quat2axisangle(obs["robot0_eef_quat"]), obs["robot0_gripper_qpos"])
-                        ),
-                    }
-                    current_instruction = instruction_1 if not done_1 else instruction_2
-                    # Query model to get action
-                    action = get_action(
-                        cfg,
-                        model,
-                        observation,
-                        current_instruction,
-                        processor=processor,
-                    )
+                    if not done_1:
+                        observation = {
+                            "full_image": img,
+                            "state": np.concatenate(
+                                (obs["robot0_eef_pos"], quat2axisangle(obs["robot0_eef_quat"]), obs["robot0_gripper_qpos"])
+                            ),
+                        }
 
-                    # Normalize gripper action [0,1] -> [-1,+1] because the environment expects the latter
-                    action = normalize_gripper_action(action, binarize=True)
+                        # Query model to get action
+                        action = get_action(
+                            cfg,
+                            model,
+                            observation,
+                            instruction_1,
+                            processor=processor,
+                        )
 
-                    # [OpenVLA] The dataloader flips the sign of the gripper action to align with other datasets
-                    # (0 = close, 1 = open), so flip it back (-1 = open, +1 = close) before executing the action
-                    if cfg.model_family == "openvla":
-                        action = invert_gripper_action(action)
+                        # Normalize gripper action [0,1] -> [-1,+1] because the environment expects the latter
+                        action = normalize_gripper_action(action, binarize=True)
 
-                    # Execute action in environment
-                    obs, reward, done, info = env.step(action.tolist())
+                        # [OpenVLA] The dataloader flips the sign of the gripper action to align with other datasets
+                        # (0 = close, 1 = open), so flip it back (-1 = open, +1 = close) before executing the action
+                        if cfg.model_family == "openvla":
+                            action = invert_gripper_action(action)
 
-                    if done:
-                        if not done_1:
-                            done_1 = True
-                            t = 0  # optionally reset step count
-                            print("First instruction succeeded. Proceeding to second.")
-                            continue
-                        else:
-                            done_2 = True
+                        # Execute action in environment
+                        obs, reward, done_1, info = env.step(action.tolist())
+                        obs2, reward2, done_2, info2 = env2.step(action.tolist())
+                    else:
+                        observation2 = {
+                            "full_image": img2,
+                            "state": np.concatenate(
+                                (obs2["robot0_eef_pos"], quat2axisangle(obs2["robot0_eef_quat"]),
+                                 obs2["robot0_gripper_qpos"])
+                            ),
+                        }
+
+                        # Query model to get action
+                        action2 = get_action(
+                            cfg,
+                            model,
+                            observation2,
+                            instruction_2,
+                            processor=processor,
+                        )
+
+                        # Normalize gripper action [0,1] -> [-1,+1] because the environment expects the latter
+                        action2 = normalize_gripper_action(action2, binarize=True)
+
+                        # [OpenVLA] The dataloader flips the sign of the gripper action to align with other datasets
+                        # (0 = close, 1 = open), so flip it back (-1 = open, +1 = close) before executing the action
+                        if cfg.model_family == "openvla":
+                            action2 = invert_gripper_action(action2)
+
+                        # Execute action in environment
+                        obs2, reward2, done_2, info2 = env2.step(action2.tolist())
+
+                        if done_2:
                             break
 
                     t += 1
@@ -264,7 +297,7 @@ def eval_libero(cfg: GenerateConfig) -> None:
 
             # Save a replay video of the episode
             save_rollout_video(
-                replay_images, total_episodes, success=episode_success, task_description=task_description, log_file=log_file
+                replay_images2, total_episodes, success=episode_success, task_description=task_description, log_file=log_file
             )
 
             # Log current results
