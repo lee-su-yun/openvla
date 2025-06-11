@@ -14,7 +14,7 @@
     <option name="ADD_SOURCE_ROOTS" value="true" />
     <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
     <option name="SCRIPT_NAME" value="$PROJECT_DIR$/experiments/robot/libero/run_libero_eval_split.py" />
-    <option name="PARAMETERS" value="--model_family openvla --pretrained_checkpoint /ckpt/openvla-libero/openvla-libero-object --task_suite_name libero_10 --center_crop True" />
+    <option name="PARAMETERS" value="--model_family openvla --pretrained_checkpoint /ckpt/openvla-libero/openvla-libero-object --task_suite_name libero_object --center_crop True" />
     <option name="SHOW_COMMAND_LINE" value="false" />
     <option name="EMULATE_TERMINAL" value="false" />
     <option name="MODULE_MODE" value="false" />
