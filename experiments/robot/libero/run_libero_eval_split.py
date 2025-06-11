@@ -157,8 +157,8 @@ def eval_libero(cfg: GenerateConfig) -> None:
         env, task_description = get_libero_env(task, cfg.model_family, resolution=256)
 
         # For custom two-step instruction execution
-        instruction_1 = "put the alphabet soup in the basket"
-        instruction_2 = "put the tomato sauce in the basket"
+        instruction_1 = "pick up the alphabet soup and place it in the basket"
+        instruction_2 = "pick up the tomato sauce and place it in the basket"
 
         # Start episodes
         task_episodes, task_successes = 0, 0
@@ -267,7 +267,7 @@ def eval_libero(cfg: GenerateConfig) -> None:
             )
 
             # Log current results
-            print(f"Success: {episode_success}")
+            print(f"Success: {episode_success}, task1: {done_1}, task2: {done_2}")
             print(f"# episodes completed so far: {total_episodes}")
             print(f"# successes: {total_successes} ({total_successes / total_episodes * 100:.1f}%)")
             log_file.write(f"Success: {episode_success}\n")
