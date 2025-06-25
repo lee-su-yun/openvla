@@ -59,16 +59,16 @@ if __name__ == "__main__":
    #
    #     print(f"Saved: {target_path}")
    #  exit()
-    import json
-    data_list = []
-    with open("/sdb1/piper_lerobot/lerobot_aligncups_5hz/test/meta/tasks.jsonl", "r") as f:
-        for line in f:
-            data_list.append(json.loads(line))
+   #  import json
+   #  data_list = []
+   #  with open("/sdb1/piper_lerobot/lerobot_aligncups_5hz/test/meta/tasks.jsonl", "r") as f:
+   #      for line in f:
+   #          data_list.append(json.loads(line))
+   #
+   #  print(data_list)
 
-    print(data_list)
 
-
-    with open("/sdb1/piper_subtask_data/train/pick/train_np/Pick the blue cup in the center./episode1.pickle", "rb") as f:
+    with open("/home/sylee/codes/episode.pickle", "rb") as f:
     # with open("/sdb1/piper_subtask_data/train/pick/Pick the blue cup in the center./1/episode.pickle", "rb") as f:
     #with open("/data/piper_subtask_data/Train/Pick the blue cup in the center./episode.pickle", "rb") as f:
     #with open("/data/piper_subtask_data/Val/Pick the yellow cup./episode.pickle", "rb") as f:
