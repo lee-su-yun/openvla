@@ -67,7 +67,7 @@ if __name__ == "__main__":
    #
    #  print(data_list)
 
-
+    print('hello')
     with open("/home/sylee/codes/episode.pickle", "rb") as f:
     # with open("/sdb1/piper_subtask_data/train/pick/Pick the blue cup in the center./1/episode.pickle", "rb") as f:
     #with open("/data/piper_subtask_data/Train/Pick the blue cup in the center./episode.pickle", "rb") as f:
